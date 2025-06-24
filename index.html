@@ -2,56 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AUAV Private Stream</title>
+  <title>AUAV Private Livestream</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    :root {
+      --auav-orange: #f58634;
+      --auav-grey: #4a4a4a;
+    }
     body {
+      margin: 0;
+      padding: 20px;
       font-family: Arial, sans-serif;
+      background: #fafafa;
+      color: var(--auav-grey);
       text-align: center;
-      background-color: #f9f9f9;
-      padding: 40px;
     }
     .logo {
-      max-width: 200px;
+      max-width: 180px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 1.8rem;
       margin-bottom: 20px;
     }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #000;
+    }
+    .video-wrapper::after {
+      content: "";
+      display: block;
+      padding-top: 56.25%; /* 16:9 */
+    }
     iframe {
-      width: 720px;
-      height: 405px;
-      max-width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       border: none;
     }
-    .offline-message {
-      display: none;
-      color: #333;
-      font-size: 1.1rem;
+    .offline {
       margin-top: 20px;
+      font-size: 1.2rem;
+      color: var(--auav-grey);
     }
   </style>
 </head>
 <body>
 
-  <img src="AUAV_STACKED.PNG" class="logo" alt="AUAV Logo">
-  <h2>Turritella UD Girth Belt</h2>
+  <img src="AUAV_STACKED.PNG" alt="AUAV Logo" class="logo">
+  <h1>AUAV Private Livestream</h1>
 
-  <div id="player-container">
+  <div class="video-wrapper" id="player-wrapper">
     <iframe
       src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar1.netlify.app"
-      allowfullscreen>
+      allowfullscreen
+      loading="lazy">
     </iframe>
   </div>
 
-  <div class="offline-message" id="offline-msg">
+  <div class="offline" id="offline-msg" style="display:none;">
     The stream is currently offline. Please check back later.
   </div>
 
   <script>
-    // Show message if iframe fails to load (offline/misconfigured)
     const iframe = document.querySelector("iframe");
     iframe.addEventListener("error", () => {
-      document.getElementById("player-container").style.display = "none";
+      document.getElementById("player-wrapper").style.display = "none";
       document.getElementById("offline-msg").style.display = "block";
     });
   </script>
-
 </body>
 </html>
