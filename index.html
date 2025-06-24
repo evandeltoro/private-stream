@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AUAV Private Livestream</title>
+  <title>AUAV Private Stream</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
@@ -11,31 +11,38 @@
     }
     body {
       margin: 0;
-      padding: 20px;
       font-family: Arial, sans-serif;
       background: #fafafa;
       color: var(--auav-grey);
       text-align: center;
     }
+    .top-bar {
+      background-color: var(--auav-orange);
+      height: 5px;
+      width: 100%;
+    }
+    .header {
+      padding: 20px 10px 10px;
+    }
     .logo {
-      max-width: 180px;
-      margin-bottom: 10px;
+      max-width: 260px;
+      height: auto;
     }
     h1 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
+      font-size: 1.6rem;
+      margin-top: 10px;
     }
     .video-wrapper {
       position: relative;
       width: 100%;
       max-width: 800px;
-      margin: 0 auto;
+      margin: 30px auto 10px;
       background: #000;
     }
     .video-wrapper::after {
       content: "";
       display: block;
-      padding-top: 56.25%; /* 16:9 */
+      padding-top: 56.25%; /* 16:9 aspect ratio */
     }
     iframe {
       position: absolute;
@@ -45,17 +52,22 @@
       height: 100%;
       border: none;
     }
-    .offline {
-      margin-top: 20px;
-      font-size: 1.2rem;
+    .offline-message {
+      display: none;
       color: var(--auav-grey);
+      font-size: 1.1rem;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <img src="AUAV_STACKED.PNG" alt="AUAV Logo" class="logo">
-  <h1>AUAV Private Livestream</h1>
+  <div class="top-bar"></div>
+
+  <div class="header">
+    <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo">
+    <h1>Private Livestream</h1>
+  </div>
 
   <div class="video-wrapper" id="player-wrapper">
     <iframe
@@ -65,7 +77,7 @@
     </iframe>
   </div>
 
-  <div class="offline" id="offline-msg" style="display:none;">
+  <div class="offline-message" id="offline-msg">
     The stream is currently offline. Please check back later.
   </div>
 
@@ -76,5 +88,6 @@
       document.getElementById("offline-msg").style.display = "block";
     });
   </script>
+
 </body>
 </html>
