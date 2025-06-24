@@ -1,15 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Private AUAV Stream</title>
+  <meta charset="UTF-8">
+  <title>AUAV Private Stream</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding: 40px;
+    }
+    .logo {
+      max-width: 200px;
+      margin-bottom: 20px;
+    }
+    iframe {
+      width: 720px;
+      height: 405px;
+      max-width: 100%;
+      border: none;
+    }
+    .offline-message {
+      display: none;
+      color: #333;
+      font-size: 1.1rem;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Private Company Stream</h2>
-  <iframe
-    src="https://player.twitch.tv/?channel=auav_us_livestream&parent=https://deepstar.netlify.app/"
-    height="480"
-    width="720"
-    allowfullscreen>
-  </iframe>
+
+  <img src="AUAV_STACKED.PNG" class="logo" alt="AUAV Logo">
+  <h2>AUAV Private Company Stream</h2>
+
+  <div id="player-container">
+    <iframe
+      src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar1.netlify.app"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="offline-message" id="offline-msg">
+    The stream is currently offline. Please check back later.
+  </div>
+
+  <script>
+    // Show message if iframe fails to load (offline/misconfigured)
+    const iframe = document.querySelector("iframe");
+    iframe.addEventListener("error", () => {
+      document.getElementById("player-container").style.display = "none";
+      document.getElementById("offline-msg").style.display = "block";
+    });
+  </script>
+
 </body>
 </html>
