@@ -14,20 +14,21 @@
     html, body {
       margin: 0;
       padding: 0;
+      height: 100vh;
+      overflow: hidden;
       font-family: 'Inter', sans-serif;
       background: #fafafa;
       color: var(--auav-grey);
-      height: 100vh;
-      overflow: hidden;
     }
 
     body {
       display: grid;
       grid-template-columns: 20px 1fr 20px;
-      grid-template-rows: 40px 1fr auto;
+      grid-template-rows: 40px auto 1fr auto;
       grid-template-areas:
         "top top top"
         "left main right"
+        "left stream right"
         "left footer right";
     }
 
@@ -37,25 +38,20 @@
       height: 40px;
     }
 
-    .side-bar-left, .side-bar-right {
-      background-color: var(--auav-orange);
-    }
-
     .side-bar-left {
       grid-area: left;
+      background-color: var(--auav-orange);
     }
 
     .side-bar-right {
       grid-area: right;
+      background-color: var(--auav-orange);
     }
 
     .main-content {
       grid-area: main;
-      padding: 20px 10px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
+      text-align: center;
+      padding: 10px 0 0;
     }
 
     .logo {
@@ -65,21 +61,30 @@
 
     h1 {
       font-size: 1.4rem;
-      margin: 10px 0 20px;
+      margin: 10px 0 15px;
     }
 
     .video-wrapper {
+      grid-area: stream;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 10px;
+    }
+
+    .video-box {
       position: relative;
       width: 100%;
       max-width: 800px;
+      aspect-ratio: 16 / 9;
       background: #000;
       border: 2px solid #000;
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      aspect-ratio: 16 / 9;
     }
 
     iframe {
+      position: absolute;
       width: 100%;
       height: 100%;
       border: none;
@@ -88,10 +93,10 @@
 
     .footer-logos {
       grid-area: footer;
-      padding: 5px 0 10px;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding-bottom: 10px;
     }
 
     .footer-logos img {
@@ -102,23 +107,22 @@
     @media (max-width: 700px) {
       body {
         grid-template-columns: 0 1fr 0;
-        grid-template-rows: 40px 1fr auto;
       }
 
       .side-bar-left, .side-bar-right {
         display: none;
       }
 
-      .footer-logos img {
-        max-width: 320px;
-      }
-
       .logo {
         max-width: 180px;
       }
 
+      .footer-logos img {
+        max-width: 300px;
+      }
+
       h1 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
     }
   </style>
@@ -127,12 +131,15 @@
 
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
+  <div class="side-bar-right"></div>
 
   <div class="main-content">
     <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo">
     <h1>Private Livestream</h1>
+  </div>
 
-    <div class="video-wrapper" id="player-wrapper">
+  <div class="video-wrapper">
+    <div class="video-box">
       <iframe
         src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar-apl.netlify.app"
         allowfullscreen
@@ -141,18 +148,9 @@
     </div>
   </div>
 
-  <div class="side-bar-right"></div>
-
   <div class="footer-logos">
     <img src="Untitled design (2).png" alt="Group Logos">
   </div>
-
-  <script>
-    const iframe = document.querySelector("iframe");
-    iframe.addEventListener("error", () => {
-      document.getElementById("player-wrapper").style.display = "none";
-    });
-  </script>
 
 </body>
 </html>
