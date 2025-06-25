@@ -18,13 +18,13 @@
       color: var(--auav-grey);
       text-align: center;
       display: grid;
-      grid-template-columns: 20px 1fr 20px;
+      grid-template-columns: 10px 1fr 10px; /* Side bars adjusted for mobile */
       grid-template-rows: 40px 1fr;
       grid-template-areas:
         "top top top"
         "left main right";
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .top-bar {
@@ -33,8 +33,7 @@
       height: 40px;
     }
 
-    .side-bar-left,
-    .side-bar-right {
+    .side-bar-left, .side-bar-right {
       background-color: var(--auav-orange);
     }
 
@@ -48,11 +47,10 @@
 
     .main-content {
       grid-area: main;
-      padding: 20px 10px 0;
+      padding: 30px 10px 80px; /* Extra space for footer image */
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
     }
 
     .logo {
@@ -63,7 +61,7 @@
     h1 {
       font-size: 1.6rem;
       margin-top: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     .video-wrapper {
@@ -74,7 +72,7 @@
       border: 2px solid #000;
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
     .video-wrapper::after {
@@ -101,7 +99,7 @@
     }
 
     .footer-logos {
-      margin-top: 10px;
+      margin-top: 30px;
     }
 
     .footer-logos img {
@@ -117,6 +115,18 @@
       .side-bar-left,
       .side-bar-right {
         display: none;
+      }
+
+      .logo {
+        max-width: 220px;
+      }
+
+      .footer-logos img {
+        max-width: 280px;
+      }
+
+      h1 {
+        font-size: 1.3rem;
       }
     }
   </style>
@@ -142,9 +152,8 @@
       The stream is currently offline. Please check back later.
     </div>
 
-    <!-- ✅ Group Logos Footer Image -->
     <div class="footer-logos">
-      <img src="Untitled design (2).png" alt="Company Group Logos" />
+      <img src="Untitled design (2).png" alt="AUAV Brand Family">
     </div>
   </div>
 
