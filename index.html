@@ -116,9 +116,16 @@
 
     .switch-container {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
+      gap: 30px;
       margin-top: 10px;
+      align-items: center;
+    }
+
+    .switch-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: bold;
     }
 
     .toggle-ios {
@@ -166,11 +173,6 @@
       transform: translateX(26px);
     }
 
-    .label-text {
-      margin-left: 10px;
-      font-weight: bold;
-    }
-
     @media (max-width: 700px) {
       body {
         grid-template-columns: 0 1fr 0;
@@ -216,18 +218,22 @@
   </div>
 
   <div class="comms-controls">
-    <h3>Comms Controls</h3>
+    <h3>Communication Controls</h3>
     <div class="switch-container">
-      <label class="toggle-ios">
-        <input type="checkbox" checked onchange="toggleComms()">
-        <span class="slider"></span>
-        <span class="label-text">Comms Audio</span>
-      </label>
-      <label class="toggle-ios">
-        <input type="checkbox" onchange="handleMicToggle(this.checked)">
-        <span class="slider"></span>
-        <span class="label-text">Mic Talk</span>
-      </label>
+      <div class="switch-group">
+        <label class="toggle-ios">
+          <input type="checkbox" checked onchange="toggleComms()">
+          <span class="slider"></span>
+        </label>
+        <span>Comms Audio</span>
+      </div>
+      <div class="switch-group">
+        <label class="toggle-ios">
+          <input type="checkbox" onchange="handleMicToggle(this.checked)">
+          <span class="slider"></span>
+        </label>
+        <span>Mic Talk</span>
+      </div>
     </div>
   </div>
 
