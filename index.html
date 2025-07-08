@@ -5,6 +5,7 @@
   <title>AUAV Private Stream</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toggle-switch-css@1.2.0/build/toggle-switch.css" />
   <script src="https://cdn.jsdelivr.net/npm/ovenplayer/dist/ovenplayer.js"></script>
   <style>
     :root {
@@ -114,17 +115,15 @@
       padding: 10px;
     }
 
-    .comms-controls button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    .switch-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
     }
 
-    .comms-controls button:hover {
-      background: #ddd;
+    .a2s-toggle-switch input:checked + .toggle {
+      background-color: var(--auav-orange);
     }
 
     @media (max-width: 700px) {
@@ -172,10 +171,23 @@
   </div>
 
   <div class="comms-controls">
-    <h3>Comms Audio Controls</h3>
-    <button onclick="toggleComms()">Toggle Comms Audio</button>
-    <button onclick="startTalking()">Start Talking</button>
-    <button onclick="stopTalking()">Stop Talking</button>
+    <h3>Comms Controls</h3>
+    <div class="switch-container">
+      <label class="a2s-toggle-switch" data-style="rounded" data-color="orange">
+        <input type="checkbox" checked onchange="toggleComms()">
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+        <span class="label">Comms Audio</span>
+      </label>
+      <label class="a2s-toggle-switch" data-style="rounded" data-color="orange">
+        <input type="checkbox" onchange="handleMicToggle(this.checked)">
+        <span class="toggle">
+          <span class="switch"></span>
+        </span>
+        <span class="label">Mic Talk</span>
+      </label>
+    </div>
   </div>
 
   <div class="footer-logos">
@@ -185,7 +197,6 @@
   <div id="comms"></div>
 
   <script>
-    // Create hidden audio-only comms stream (placeholder)
     const commsPlayer = OvenPlayer.create("comms", {
       sources: [{
         type: "webrtc",
@@ -203,22 +214,22 @@
     }
 
     let micStream;
-    function startTalking() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        micStream = stream;
-        console.log("Mic stream ready:", stream);
-        // Connect micStream to media server here
-      }).catch(err => {
-        alert("Mic access denied or unavailable.");
-        console.error(err);
-      });
-    }
-
-    function stopTalking() {
-      if (micStream) {
-        micStream.getTracks().forEach(track => track.stop());
-        micStream = null;
-        console.log("Mic stream stopped.");
+    function handleMicToggle(enabled) {
+      if (enabled) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          micStream = stream;
+          console.log("Mic stream ready:", stream);
+          // Connect micStream to server here
+        }).catch(err => {
+          alert("Mic access denied or unavailable.");
+          console.error(err);
+        });
+      } else {
+        if (micStream) {
+          micStream.getTracks().forEach(track => track.stop());
+          micStream = null;
+          console.log("Mic stream stopped.");
+        }
       }
     }
   </script>
