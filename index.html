@@ -62,12 +62,15 @@
     }
   </style>
   <script>
-    // Password wall for the entire site
     (function() {
+      if (sessionStorage.getItem('auav_pw_ok') === 'yes') return;
       var allowed = false;
       while(!allowed) {
         var pw = prompt("Enter password to access:");
-        if (pw === "Shell123") allowed = true;
+        if (pw === "Shell123") {
+          allowed = true;
+          sessionStorage.setItem('auav_pw_ok', 'yes');
+        }
         else alert("Wrong password.");
       }
     })();
