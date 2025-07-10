@@ -15,7 +15,6 @@
       margin: 0;
       padding: 0;
       height: 100vh;
-      overflow: hidden;
       font-family: 'Inter', sans-serif;
       background: #fafafa;
       color: var(--auav-grey);
@@ -30,6 +29,7 @@
         "left stream right"
         "left comms right"
         "left footer right";
+      overflow: hidden;
     }
     .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
     .side-bar-left { grid-area: left; background-color: var(--auav-orange);}
@@ -60,32 +60,98 @@
       .footer-logos img { max-width: 300px; margin-top: -16px;}
       h1 { font-size: 1.2rem;}
     }
+
+    /* --- PASSWORD OVERLAY --- */
+    #password-overlay {
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      background: rgba(250, 250, 250, 0.97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      transition: opacity 0.4s;
+    }
+    #pw-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px 0 rgba(0,0,0,0.15);
+      padding: 38px 30px 26px 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 320px;
+      border-top: 8px solid var(--auav-orange);
+    }
+    #pw-box img {
+      width: 110px;
+      margin-bottom: 16px;
+    }
+    #pw-box h2 {
+      margin: 0 0 18px 0;
+      font-weight: 600;
+      font-size: 1.25rem;
+      color: var(--auav-grey);
+      letter-spacing: 0.02em;
+    }
+    #pw-input {
+      padding: 10px 16px;
+      border: 1.5px solid var(--auav-orange);
+      border-radius: 7px;
+      font-size: 1.04rem;
+      width: 100%;
+      margin-bottom: 12px;
+      transition: border-color 0.3s;
+    }
+    #pw-input:focus {
+      outline: none;
+      border-color: #fd9827;
+    }
+    #pw-btn {
+      background: var(--auav-orange);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 9px 32px;
+      font-size: 1.06rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      margin-bottom: 2px;
+      margin-top: 6px;
+      transition: background 0.2s;
+    }
+    #pw-btn:active {
+      background: #ff9932;
+    }
+    #pw-error {
+      color: #c4432c;
+      font-size: 0.98rem;
+      min-height: 22px;
+      margin-top: 2px;
+    }
   </style>
-  <script>
-    (function() {
-      if (sessionStorage.getItem('auav_pw_ok') === 'yes') return;
-      var allowed = false;
-      while(!allowed) {
-        var pw = prompt("Enter password to access:");
-        if (pw === "Shell123") {
-          allowed = true;
-          sessionStorage.setItem('auav_pw_ok', 'yes');
-        }
-        else alert("Wrong password.");
-      }
-    })();
-  </script>
 </head>
 <body>
+  <!-- Password Overlay -->
+  <div id="password-overlay">
+    <div id="pw-box">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo" />
+      <h2>Enter Password to Access</h2>
+      <input type="password" id="pw-input" placeholder="Password" autocomplete="off" />
+      <button id="pw-btn">Enter</button>
+      <div id="pw-error"></div>
+    </div>
+  </div>
+
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
   <div class="side-bar-right"></div>
-
   <div class="main-content">
     <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo">
     <h1>Private Livestream</h1>
   </div>
-
   <div class="video-wrapper">
     <div class="video-box">
       <iframe
@@ -95,7 +161,6 @@
       </iframe>
     </div>
   </div>
-
   <div class="comms-controls">
     <h3>Communication Controls</h3>
     <div class="switch-container">
@@ -115,14 +180,50 @@
       </div>
     </div>
   </div>
-
   <div class="footer-logos">
     <img src="Untitled design (2).png" alt="Group Logos">
   </div>
-
   <div id="comms"></div>
 
   <script>
+    // Password overlay logic (remembers session)
+    const PASSWORD = "Shell123"; // Change this!
+    const overlay = document.getElementById('password-overlay');
+    const input = document.getElementById('pw-input');
+    const btn = document.getElementById('pw-btn');
+    const error = document.getElementById('pw-error');
+
+    // If already validated this session, hide overlay
+    if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function tryPassword() {
+      if (input.value === PASSWORD) {
+        overlay.style.opacity = 0;
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 380);
+        sessionStorage.setItem('auav_pw_ok', 'yes');
+        error.textContent = '';
+      } else {
+        error.textContent = 'Incorrect password.';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    btn.onclick = tryPassword;
+    input.onkeydown = function(e) {
+      if (e.key === "Enter") tryPassword();
+    };
+
+    // Focus on input by default
+    setTimeout(() => { input.focus(); }, 200);
+
+    // OvenPlayer and comms logic
     const commsPlayer = OvenPlayer.create("comms", {
       sources: [{
         type: "webrtc",
@@ -144,17 +245,14 @@
       if (enabled) {
         navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
           micStream = stream;
-          console.log("Mic stream ready:", stream);
           // Connect micStream to server here
         }).catch(err => {
           alert("Mic access denied or unavailable.");
-          console.error(err);
         });
       } else {
         if (micStream) {
           micStream.getTracks().forEach(track => track.stop());
           micStream = null;
-          console.log("Mic stream stopped.");
         }
       }
     }
