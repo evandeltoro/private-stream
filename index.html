@@ -34,53 +34,26 @@
     .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
     .side-bar-left { grid-area: left; background-color: var(--auav-orange);}
     .side-bar-right { grid-area: right; background-color: var(--auav-orange);}
-    .main-content { grid-area: main; text-align: center; padding: 6px 0 0;}
-    .logo { max-width: 200px; height: auto;}
-    h1 { font-size: 1.25rem; margin: 7px 0 10px;}
-    .video-wrapper { grid-area: stream; display: flex; justify-content: center; align-items: center; padding: 0 6px;}
-    .video-box { position: relative; width: 100%; max-width: 650px; aspect-ratio: 16 / 9; background: #000; border: 2px solid #000; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
+    .main-content { grid-area: main; text-align: center; padding: 10px 0 0;}
+    .logo { max-width: 240px; height: auto;}
+    h1 { font-size: 1.4rem; margin: 10px 0 15px;}
+    .video-wrapper { grid-area: stream; display: flex; justify-content: center; align-items: center; padding: 0 10px;}
+    .video-box { position: relative; width: 100%; max-width: 800px; aspect-ratio: 16 / 9; background: #000; border: 2px solid #000; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
     iframe { position: absolute; width: 100%; height: 100%; border: none; border-radius: 6px;}
-    .comms-controls { grid-area: comms; display: flex; flex-direction: column; align-items: center; padding: 7px;}
-    .comms-controls h3 { font-size: 1.08rem; margin-bottom: 8px;}
-    .switch-container { display: flex; gap: 22px; margin-top: 3px; align-items: center;}
-    .switch-group { display: flex; flex-direction: column; align-items: center; font-weight: bold; font-size: 0.97rem;}
-    .toggle-ios { position: relative; display: inline-block; width: 56px; height: 28px;}
+    .footer-logos { grid-area: footer; display: flex; justify-content: center; align-items: center;}
+    .footer-logos img { max-width: 400px; height: auto; margin-top: -20px;}
+    .comms-controls { grid-area: comms; display: flex; flex-direction: column; align-items: center; padding: 10px;}
+    .switch-container { display: flex; gap: 30px; margin-top: 10px; align-items: center;}
+    .switch-group { display: flex; flex-direction: column; align-items: center; font-weight: bold;}
+    .toggle-ios { position: relative; display: inline-block; width: 70px; height: 34px;}
     .toggle-ios input { opacity: 0; width: 0; height: 0;}
     .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;}
-    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
+    .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
     input:checked + .slider { background-color: var(--auav-orange);}
-    input:checked + .slider:before { transform: translateX(24px);}
-    .slider::after { content: "OFF"; color: white; font-size: 10px; font-weight: bold; position: absolute; top: 5px; right: 8px; transition: .4s;}
-    input:checked + .slider::after { content: "ON"; left: 8px; right: auto;}
-    .footer-logos { grid-area: footer; display: flex; justify-content: center; align-items: flex-end; min-height: 55px;}
-    .footer-logos img { max-width: 250px; height: auto; margin-top: -10px;}
-    .sticky-footer {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--auav-orange);
-      color: #fff;
-      font-size: 0.97rem;
-      text-align: center;
-      z-index: 10000;
-      padding: 7px 0 5px 0;
-      letter-spacing: 0.01em;
-      box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.07);
-      font-weight: 600;
-      width: 100vw;
-    }
-    @media (max-width: 700px) {
-      body { grid-template-columns: 0 1fr 0;}
-      .side-bar-left, .side-bar-right { display: none;}
-      .logo { max-width: 110px;}
-      .footer-logos img { max-width: 130px; margin-top: -7px;}
-      h1 { font-size: 1rem;}
-      .sticky-footer { font-size: 0.93rem; }
-      .video-box { max-width: 97vw; }
-      .comms-controls h3 { font-size: 0.95rem;}
-      .switch-group { font-size: 0.88rem;}
-    }
+    input:checked + .slider:before { transform: translateX(36px);}
+    .slider::after { content: "OFF"; color: white; font-size: 12px; font-weight: bold; position: absolute; top: 8px; right: 10px; transition: .4s;}
+    input:checked + .slider::after { content: "ON"; left: 10px; right: auto;}
+    /* --- PASSWORD OVERLAY --- */
     #password-overlay {
       position: fixed;
       z-index: 9999;
@@ -96,31 +69,31 @@
       background: #fff;
       border-radius: 18px;
       box-shadow: 0 6px 32px 0 rgba(0,0,0,0.15);
-      padding: 32px 22px 20px 22px;
+      padding: 38px 30px 26px 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 220px;
+      min-width: 320px;
       border-top: 8px solid var(--auav-orange);
     }
     #pw-box img {
-      width: 90px;
-      margin-bottom: 13px;
+      width: 110px;
+      margin-bottom: 16px;
     }
     #pw-box h2 {
-      margin: 0 0 14px 0;
+      margin: 0 0 18px 0;
       font-weight: 600;
-      font-size: 1.09rem;
+      font-size: 1.25rem;
       color: var(--auav-grey);
       letter-spacing: 0.02em;
     }
     #pw-input {
-      padding: 7px 12px;
+      padding: 10px 16px;
       border: 1.5px solid var(--auav-orange);
       border-radius: 7px;
-      font-size: 0.94rem;
+      font-size: 1.04rem;
       width: 100%;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       transition: border-color 0.3s;
     }
     #pw-input:focus {
@@ -132,8 +105,8 @@
       color: #fff;
       border: none;
       border-radius: 7px;
-      padding: 7px 22px;
-      font-size: 0.98rem;
+      padding: 9px 32px;
+      font-size: 1.06rem;
       font-weight: 600;
       letter-spacing: 0.04em;
       cursor: pointer;
@@ -146,9 +119,56 @@
     }
     #pw-error {
       color: #c4432c;
-      font-size: 0.95rem;
-      min-height: 18px;
+      font-size: 0.98rem;
+      min-height: 22px;
       margin-top: 2px;
+    }
+    /* ---- MOBILE ONLY ---- */
+    @media (max-width: 700px) {
+      body {
+        grid-template-columns: 0 1fr 0;
+      }
+      .side-bar-left, .side-bar-right {
+        display: none;
+      }
+      .main-content {
+        padding: 18px 0 0;
+      }
+      .logo {
+        max-width: 130px;
+        margin-bottom: 9px;
+        margin-top: 0;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      h1 {
+        font-size: 1.08rem;
+        margin-top: 4px;
+        margin-bottom: 13px;
+        line-height: 1.15;
+      }
+      .video-wrapper {
+        padding: 0 2vw;
+      }
+      .video-box {
+        max-width: 97vw;
+      }
+      .comms-controls h3 {
+        font-size: 0.98rem;
+        margin-bottom: 5px;
+      }
+      .switch-group {
+        font-size: 0.89rem;
+      }
+      .footer-logos img {
+        max-width: 115px;
+        margin-top: -4px;
+      }
+      .sticky-footer {
+        font-size: 0.92rem;
+        padding: 6px 0 4px 0;
+      }
     }
   </style>
 </head>
@@ -163,7 +183,6 @@
       <div id="pw-error"></div>
     </div>
   </div>
-
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
   <div class="side-bar-right"></div>
@@ -202,14 +221,7 @@
   <div class="footer-logos">
     <img src="Untitled design (2).png" alt="Group Logos">
   </div>
-
-  <!-- Sticky Footer -->
-  <div class="sticky-footer">
-    © 2025 AUAV — Test Stream Environment
-  </div>
-
   <div id="comms"></div>
-
   <script>
     // Password overlay logic (remembers session)
     const PASSWORD = "Shell123"; // Change this!
@@ -217,13 +229,11 @@
     const input = document.getElementById('pw-input');
     const btn = document.getElementById('pw-btn');
     const error = document.getElementById('pw-error');
-
     // If already validated this session, hide overlay
     if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
       overlay.style.display = 'none';
       document.body.style.overflow = '';
     }
-
     function tryPassword() {
       if (input.value === PASSWORD) {
         overlay.style.opacity = 0;
@@ -239,12 +249,10 @@
         input.focus();
       }
     }
-
     btn.onclick = tryPassword;
     input.onkeydown = function(e) {
       if (e.key === "Enter") tryPassword();
     };
-
     // Focus on input by default
     setTimeout(() => { input.focus(); }, 200);
 
@@ -260,11 +268,9 @@
       width: "0",
       height: "0"
     });
-
     function toggleComms() {
       commsPlayer.setMute(!commsPlayer.getMute());
     }
-
     let micStream;
     function handleMicToggle(enabled) {
       if (enabled) {
