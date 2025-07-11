@@ -53,6 +53,34 @@
     input:checked + .slider:before { transform: translateX(36px);}
     .slider::after { content: "OFF"; color: white; font-size: 12px; font-weight: bold; position: absolute; top: 8px; right: 10px; transition: .4s;}
     input:checked + .slider::after { content: "ON"; left: 10px; right: auto;}
+
+    /* --- STICKY FOOTER --- */
+    .sticky-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--auav-orange);
+      color: #fff;
+      font-size: 0.97rem;
+      text-align: center;
+      z-index: 10000;
+      padding: 7px 0 5px 0;
+      letter-spacing: 0.01em;
+      box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.07);
+      font-weight: 600;
+      width: 100vw;
+    }
+
+    @media (max-width: 700px) {
+      body { grid-template-columns: 0 1fr 0;}
+      .side-bar-left, .side-bar-right { display: none;}
+      .logo { max-width: 180px;}
+      .footer-logos img { max-width: 300px; margin-top: -16px;}
+      h1 { font-size: 1.2rem;}
+      .sticky-footer { font-size: 0.93rem; }
+    }
+
     /* --- PASSWORD OVERLAY --- */
     #password-overlay {
       position: fixed;
@@ -123,53 +151,6 @@
       min-height: 22px;
       margin-top: 2px;
     }
-    /* ---- MOBILE ONLY ---- */
-    @media (max-width: 700px) {
-      body {
-        grid-template-columns: 0 1fr 0;
-      }
-      .side-bar-left, .side-bar-right {
-        display: none;
-      }
-      .main-content {
-        padding: 18px 0 0;
-      }
-      .logo {
-        max-width: 130px;
-        margin-bottom: 9px;
-        margin-top: 0;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      h1 {
-        font-size: 1.08rem;
-        margin-top: 4px;
-        margin-bottom: 13px;
-        line-height: 1.15;
-      }
-      .video-wrapper {
-        padding: 0 2vw;
-      }
-      .video-box {
-        max-width: 97vw;
-      }
-      .comms-controls h3 {
-        font-size: 0.98rem;
-        margin-bottom: 5px;
-      }
-      .switch-group {
-        font-size: 0.89rem;
-      }
-      .footer-logos img {
-        max-width: 115px;
-        margin-top: -4px;
-      }
-      .sticky-footer {
-        font-size: 0.92rem;
-        padding: 6px 0 4px 0;
-      }
-    }
   </style>
 </head>
 <body>
@@ -183,6 +164,7 @@
       <div id="pw-error"></div>
     </div>
   </div>
+
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
   <div class="side-bar-right"></div>
@@ -221,7 +203,14 @@
   <div class="footer-logos">
     <img src="Untitled design (2).png" alt="Group Logos">
   </div>
+
+  <!-- Sticky Footer -->
+  <div class="sticky-footer">
+    © 2025 AUAV — Test Stream Environment
+  </div>
+
   <div id="comms"></div>
+
   <script>
     // Password overlay logic (remembers session)
     const PASSWORD = "Shell123"; // Change this!
@@ -229,11 +218,13 @@
     const input = document.getElementById('pw-input');
     const btn = document.getElementById('pw-btn');
     const error = document.getElementById('pw-error');
+
     // If already validated this session, hide overlay
     if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
       overlay.style.display = 'none';
       document.body.style.overflow = '';
     }
+
     function tryPassword() {
       if (input.value === PASSWORD) {
         overlay.style.opacity = 0;
@@ -249,10 +240,12 @@
         input.focus();
       }
     }
+
     btn.onclick = tryPassword;
     input.onkeydown = function(e) {
       if (e.key === "Enter") tryPassword();
     };
+
     // Focus on input by default
     setTimeout(() => { input.focus(); }, 200);
 
@@ -268,9 +261,11 @@
       width: "0",
       height: "0"
     });
+
     function toggleComms() {
       commsPlayer.setMute(!commsPlayer.getMute());
     }
+
     let micStream;
     function handleMicToggle(enabled) {
       if (enabled) {
