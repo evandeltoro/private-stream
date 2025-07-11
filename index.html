@@ -143,7 +143,7 @@
       min-height: 18px;
       margin-top: 2px;
     }
-    /* ----------- MOBILE-ONLY LOCK-TO-VIEWPORT ----------- */
+    /* --- MOBILE LAYOUT/spacing FIX --- */
     @media (max-width: 700px) {
       html, body {
         height: 100vh !important;
@@ -153,25 +153,25 @@
       }
       body {
         grid-template-columns: 0 1fr 0;
-        grid-template-rows: 9vw 15vw 34vw 13vw 14vw;
-        /* top, main, stream, comms, footer */
+        grid-template-rows: 11vw 18vw 35vw 14vw 15vw;
+        /* Increase rows for more breathing room! */
         height: 100vh !important;
         min-height: 100vh !important;
         max-height: 100vh !important;
       }
       .side-bar-left, .side-bar-right { display: none; }
       .main-content { padding: 0; }
-      .logo { max-width: 21vw; margin-top: 1.7vw; }
-      h1 { font-size: 4vw; margin: 0.8vw 0 1vw 0;}
+      .logo { max-width: 23vw; margin-top: 2vw; }
+      h1 { font-size: 4.6vw; margin: 1.7vw 0 2vw 0;}
       .video-wrapper { padding: 0; }
       .video-box { max-width: 97vw; aspect-ratio: 16 / 9; min-height: 0; }
       .comms-controls { padding: 0; }
-      .comms-controls h3 { font-size: 3.7vw; margin-bottom: 0.5vw; margin-top: 0;}
-      .switch-group { font-size: 2.8vw;}
-      .switch-container { gap: 3.5vw; margin-top: 0.3vw; }
-      .toggle-ios { width: 11vw; height: 5vw;}
-      .toggle-ios .slider:before { height: 3.7vw; width: 3.7vw; left: 0.7vw; bottom: 0.7vw;}
-      .footer-logos img { max-width: 19vw; margin-top: 0; margin-bottom: 1vw;}
+      .comms-controls h3 { font-size: 4vw; margin-bottom: 1.2vw; margin-top: 0;}
+      .switch-group { font-size: 3vw;}
+      .switch-container { gap: 5vw; margin-top: 1vw; }
+      .toggle-ios { width: 12vw; height: 5.5vw;}
+      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 0.8vw; bottom: 0.8vw;}
+      .footer-logos img { max-width: 20vw; margin-top: 0; margin-bottom: 1.2vw;}
       .footer-logos { min-height: 7vw;}
       .sticky-footer { font-size: 2.5vw; padding: 2vw 0 1.7vw 0;}
     }
