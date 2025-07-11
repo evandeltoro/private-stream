@@ -70,17 +70,6 @@
       font-weight: 600;
       width: 100vw;
     }
-    @media (max-width: 700px) {
-      body { grid-template-columns: 0 1fr 0;}
-      .side-bar-left, .side-bar-right { display: none;}
-      .logo { max-width: 110px;}
-      .footer-logos img { max-width: 130px; margin-top: 0; margin-bottom: 2px;}
-      h1 { font-size: 1rem;}
-      .sticky-footer { font-size: 0.93rem; }
-      .video-box { max-width: 97vw; }
-      .comms-controls h3 { font-size: 0.95rem;}
-      .switch-group { font-size: 0.88rem;}
-    }
     #password-overlay {
       position: fixed;
       z-index: 9999;
@@ -149,6 +138,39 @@
       font-size: 0.95rem;
       min-height: 18px;
       margin-top: 2px;
+    }
+
+    /* ----------- MOBILE-ONLY OPTIMIZATION ----------- */
+    @media (max-width: 700px) {
+      html, body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+      }
+      body {
+        grid-template-columns: 0 1fr 0;
+        grid-template-rows: 12vw 20vw 41vw 14vw 14vw;
+        /* top, main, stream, comms, footer */
+        height: 100vh !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+      }
+      .side-bar-left, .side-bar-right { display: none; }
+      .logo { max-width: 21vw; }
+      .main-content { padding: 0; }
+      h1 { font-size: 3.9vw; margin: 1vw 0 1vw 0;}
+      .video-wrapper { padding: 0; }
+      .video-box { max-width: 99vw; aspect-ratio: 16 / 9; min-height: 0; }
+      .comms-controls { padding: 0; }
+      .comms-controls h3 { font-size: 3.5vw; margin-bottom: 0.8vw; margin-top: 0;}
+      .switch-group { font-size: 3.1vw;}
+      .switch-container { gap: 4vw; margin-top: 0.5vw; }
+      .toggle-ios { width: 13vw; height: 6vw;}
+      .toggle-ios .slider:before { height: 4.6vw; width: 4.6vw; left: 0.7vw; bottom: 0.7vw;}
+      .footer-logos img { max-width: 22vw; margin-top: 0; margin-bottom: 0.5vw;}
+      .footer-logos { min-height: 10vw;}
+      .sticky-footer { font-size: 3vw; padding: 2.4vw 0 2vw 0;}
     }
   </style>
 </head>
