@@ -53,12 +53,32 @@
     input:checked + .slider:before { transform: translateX(36px);}
     .slider::after { content: "OFF"; color: white; font-size: 12px; font-weight: bold; position: absolute; top: 8px; right: 10px; transition: .4s;}
     input:checked + .slider::after { content: "ON"; left: 10px; right: auto;}
+
+    /* --- STICKY FOOTER --- */
+    .sticky-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--auav-orange);
+      color: #fff;
+      font-size: 0.97rem;
+      text-align: center;
+      z-index: 10000;
+      padding: 7px 0 5px 0;
+      letter-spacing: 0.01em;
+      box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.07);
+      font-weight: 600;
+      width: 100vw;
+    }
+
     @media (max-width: 700px) {
       body { grid-template-columns: 0 1fr 0;}
       .side-bar-left, .side-bar-right { display: none;}
       .logo { max-width: 180px;}
       .footer-logos img { max-width: 300px; margin-top: -16px;}
       h1 { font-size: 1.2rem;}
+      .sticky-footer { font-size: 0.93rem; }
     }
 
     /* --- PASSWORD OVERLAY --- */
@@ -183,6 +203,12 @@
   <div class="footer-logos">
     <img src="Untitled design (2).png" alt="Group Logos">
   </div>
+
+  <!-- Sticky Footer -->
+  <div class="sticky-footer">
+    © 2025 AUAV — Test Stream Environment
+  </div>
+
   <div id="comms"></div>
 
   <script>
