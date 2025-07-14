@@ -154,23 +154,24 @@
       }
       body {
         grid-template-columns: 0 1fr 0;
-        grid-template-rows: 13vw 1fr 37vw 13vw 14vw;
+        grid-template-rows: 13vw 1fr 26vw 10vw 11vw;
         height: 100vh !important;
         min-height: 100vh !important;
         max-height: 100vh !important;
       }
       .side-bar-left, .side-bar-right { display: none; }
-      .main-content { 
-        padding-top: 0 !important;
-        margin-top: 0 !important;
-      }
+      .main-content { padding-top: 0 !important; margin-top: 0 !important; }
       .logo { max-width: 24vw; margin-top: 2vw; }
       h1 { font-size: 5vw; margin: 2vw 0 3vw 0;}
-      .video-wrapper { margin-top: -3vw; }
-      .video-box { max-width: 97vw; aspect-ratio: 16 / 9; min-height: 0; }
+      .video-wrapper { margin-top: -8vw; }
+      .video-box { 
+        max-width: 97vw;
+        aspect-ratio: 16 / 7.5 !important; /* FLATTER ratio to shrink height */
+        min-height: 0;
+      }
       .comms-controls { 
-        margin-top: -2vw !important;
-        margin-bottom: 3vw !important;
+        margin-top: -4vw !important;
+        margin-bottom: 2vw !important;
       }
       .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
       .switch-group { font-size: 3vw;}
@@ -178,7 +179,7 @@
       .toggle-ios { width: 13vw; height: 6vw;}
       .toggle-ios .slider:before { height: 4.5vw; width: 4.5vw; left: 1vw; bottom: 1vw;}
       .footer-logos { min-height: 7vw; margin-bottom: 0vw;}
-      .footer-logos img { max-width: 22vw; margin-top: 0; margin-bottom: 0.5vw;}
+      .footer-logos img { max-width: 20vw; margin-top: 0; margin-bottom: 0.2vw;}
       .sticky-footer { font-size: 2.7vw; padding: 2vw 0 1.7vw 0;}
     }
   </style>
