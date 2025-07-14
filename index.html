@@ -153,9 +153,15 @@
       }
       body {
         grid-template-columns: 0 1fr 0;
-        /*            top   main        video     comms      footer */
-        grid-template-rows: 11vw min-content 13vw 43vw 7vw 12vw 8vw;
-        /* main-content, gap, stream, gap, comms, logos, footer */
+        grid-template-rows:
+          11vw         /* top-bar */
+          min-content  /* main-content (logo, title) */
+          13vw         /* gap before stream box */
+          43vw         /* stream box */
+          7vw          /* gap under stream box (increased) */
+          14vw         /* comms controls */
+          12vw         /* big gap for footer logos (doubled!) */
+          8vw;         /* sticky footer */
         height: 100vh !important;
         min-height: 100vh !important;
         max-height: 100vh !important;
@@ -177,7 +183,7 @@
       .switch-container { gap: 5vw; margin-top: 1vw; }
       .toggle-ios { width: 13vw; height: 5vw;}
       .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
-      .footer-logos { min-height: 4vw; margin-bottom: 0vw; margin-top: 0vw;}
+      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 0vw;}
       .footer-logos img { max-width: 18vw; margin-top: 0; margin-bottom: 0vw;}
       .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
     }
