@@ -18,7 +18,6 @@
       font-family: 'Inter', sans-serif;
       background: #fafafa;
       color: var(--auav-grey);
-      box-sizing: border-box;
     }
     body {
       display: grid;
@@ -31,9 +30,6 @@
         "left comms right"
         "left footer right";
       overflow: hidden;
-      height: 100vh;
-      min-height: 100vh;
-      max-height: 100vh;
     }
     .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
     .side-bar-left { grid-area: left; background-color: var(--auav-orange);}
@@ -57,7 +53,7 @@
     .slider::after { content: "OFF"; color: white; font-size: 10px; font-weight: bold; position: absolute; top: 5px; right: 8px; transition: .4s;}
     input:checked + .slider::after { content: "ON"; left: 8px; right: auto;}
     .footer-logos { grid-area: footer; display: flex; justify-content: center; align-items: flex-end; min-height: 55px;}
-    .footer-logos img { max-width: 250px; height: auto; margin-top: 0; margin-bottom: 3px;}
+    .footer-logos img { max-width: 250px; height: auto; margin-top: -10px;}
     .sticky-footer {
       position: fixed;
       left: 0;
@@ -74,6 +70,23 @@
       font-weight: 600;
       width: 100vw;
     }
+    /* ------ MOBILE ONLY FIXES ------ */
+    @media (max-width: 700px) {
+      body { grid-template-columns: 0 1fr 0; }
+      .side-bar-left, .side-bar-right { display: none; }
+      .main-content { padding-top: 38px !important; }
+      .logo { max-width: 110px;}
+      h1 { font-size: 1rem;}
+      .video-wrapper { margin-top: 42px !important; }
+      .video-box { max-width: 97vw; }
+      .comms-controls { margin-top: 30px !important; margin-bottom: 10px !important;}
+      .comms-controls h3 { font-size: 0.95rem;}
+      .switch-group { font-size: 0.88rem;}
+      .footer-logos img { max-width: 130px; margin-top: 2px;}
+      .footer-logos { margin-bottom: 24px; }
+      .sticky-footer { font-size: 0.93rem; }
+    }
+    /* --- PASSWORD OVERLAY --- */
     #password-overlay {
       position: fixed;
       z-index: 9999;
@@ -143,38 +156,6 @@
       min-height: 18px;
       margin-top: 2px;
     }
-    /* --- MOBILE LAYOUT/spacing FIX --- */
-    @media (max-width: 700px) {
-      html, body {
-        height: 100vh !important;
-        min-height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
-      }
-      body {
-        grid-template-columns: 0 1fr 0;
-        grid-template-rows: 11vw 18vw 35vw 14vw 15vw;
-        /* Increase rows for more breathing room! */
-        height: 100vh !important;
-        min-height: 100vh !important;
-        max-height: 100vh !important;
-      }
-      .side-bar-left, .side-bar-right { display: none; }
-      .main-content { padding: 0; }
-      .logo { max-width: 23vw; margin-top: 2vw; }
-      h1 { font-size: 4.6vw; margin: 1.7vw 0 2vw 0;}
-      .video-wrapper { padding: 0; }
-      .video-box { max-width: 97vw; aspect-ratio: 16 / 9; min-height: 0; }
-      .comms-controls { padding: 0; }
-      .comms-controls h3 { font-size: 4vw; margin-bottom: 1.2vw; margin-top: 0;}
-      .switch-group { font-size: 3vw;}
-      .switch-container { gap: 5vw; margin-top: 1vw; }
-      .toggle-ios { width: 12vw; height: 5.5vw;}
-      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 0.8vw; bottom: 0.8vw;}
-      .footer-logos img { max-width: 20vw; margin-top: 0; margin-bottom: 1.2vw;}
-      .footer-logos { min-height: 7vw;}
-      .sticky-footer { font-size: 2.5vw; padding: 2vw 0 1.7vw 0;}
-    }
   </style>
 </head>
 <body>
@@ -188,6 +169,7 @@
       <div id="pw-error"></div>
     </div>
   </div>
+
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
   <div class="side-bar-right"></div>
@@ -226,22 +208,28 @@
   <div class="footer-logos">
     <img src="Untitled design (2).png" alt="Group Logos">
   </div>
+
+  <!-- Sticky Footer -->
   <div class="sticky-footer">
     © 2025 AUAV — Test Stream Environment
   </div>
+
   <div id="comms"></div>
+
   <script>
     // Password overlay logic (remembers session)
-    const PASSWORD = "Shell123";
+    const PASSWORD = "Shell123"; // Change this!
     const overlay = document.getElementById('password-overlay');
     const input = document.getElementById('pw-input');
     const btn = document.getElementById('pw-btn');
     const error = document.getElementById('pw-error');
+
     // If already validated this session, hide overlay
     if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
       overlay.style.display = 'none';
       document.body.style.overflow = '';
     }
+
     function tryPassword() {
       if (input.value === PASSWORD) {
         overlay.style.opacity = 0;
@@ -257,10 +245,13 @@
         input.focus();
       }
     }
+
     btn.onclick = tryPassword;
     input.onkeydown = function(e) {
       if (e.key === "Enter") tryPassword();
     };
+
+    // Focus on input by default
     setTimeout(() => { input.focus(); }, 200);
 
     // OvenPlayer and comms logic
@@ -275,9 +266,11 @@
       width: "0",
       height: "0"
     });
+
     function toggleComms() {
       commsPlayer.setMute(!commsPlayer.getMute());
     }
+
     let micStream;
     function handleMicToggle(enabled) {
       if (enabled) {
