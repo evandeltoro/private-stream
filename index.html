@@ -36,8 +36,28 @@
       max-height: 100vh;
     }
     .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
-    .side-bar-left { grid-area: left; background-color: var(--auav-orange);}
-    .side-bar-right { grid-area: right; background-color: var(--auav-orange);}
+
+    /* --- NEW FULL-HEIGHT SIDEBARS FOR DESKTOP ONLY --- */
+    .side-bar-left, .side-bar-right { 
+      grid-area: left; 
+      background-color: var(--auav-orange);
+    }
+    @media (min-width: 701px) {
+      .side-bar-left, .side-bar-right {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        z-index: 1;
+        background-color: var(--auav-orange);
+      }
+      .side-bar-left { left: 0; }
+      .side-bar-right { right: 0; }
+    }
+    @media (max-width: 700px) {
+      .side-bar-left, .side-bar-right { display: none; }
+    }
+
     .main-content { grid-area: main; text-align: center; padding: 6px 0 0;}
     .logo { max-width: 200px; height: auto;}
     h1 { font-size: 1.25rem; margin: 7px 0 10px;}
@@ -154,14 +174,14 @@
       body {
         grid-template-columns: 0 1fr 0;
         grid-template-rows:
-          11vw         /* top-bar */
-          min-content  /* main-content (logo, title) */
-          13vw         /* gap before stream box */
-          43vw         /* stream box */
-          12vw         /* gap under stream box */
-          14vw         /* comms controls */
-          48vw         /* big gap for footer logos (doubled again) */
-          8vw;         /* sticky footer */
+          11vw
+          min-content
+          13vw
+          43vw
+          12vw
+          14vw
+          48vw
+          8vw;
         height: 100vh !important;
         min-height: 100vh !important;
         max-height: 100vh !important;
