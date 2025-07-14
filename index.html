@@ -1,4 +1,3 @@
-<!-- Only the CSS between <style> ... </style> is changed from your last version -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,6 +36,8 @@
       max-height: 100vh;
     }
     .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
+
+    /* --- NEW FULL-HEIGHT SIDEBARS FOR DESKTOP ONLY --- */
     .side-bar-left, .side-bar-right { 
       grid-area: left; 
       background-color: var(--auav-orange);
@@ -52,28 +53,11 @@
       }
       .side-bar-left { left: 0; }
       .side-bar-right { right: 0; }
-
-      /* --- HIDE TWITCH FLOATING HANDLE WITH AN ORANGE OVERLAY --- */
-      .video-box {
-        position: relative;
-        overflow: hidden;
-      }
-      .video-box::before {
-        content: "";
-        position: absolute;
-        left: -22px;  /* covers into the orange bar, adjust as needed */
-        top: -10px;
-        width: 35px;
-        height: 50px;
-        background: var(--auav-orange);
-        z-index: 2;
-        border-radius: 0 0 9px 0;
-        pointer-events: none;
-      }
     }
     @media (max-width: 700px) {
       .side-bar-left, .side-bar-right { display: none; }
     }
+
     .main-content { grid-area: main; text-align: center; padding: 6px 0 0;}
     .logo { max-width: 200px; height: auto;}
     h1 { font-size: 1.25rem; margin: 7px 0 10px;}
