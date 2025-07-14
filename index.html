@@ -143,61 +143,43 @@
       min-height: 18px;
       margin-top: 2px;
     }
-
     /* --- MOBILE LAYOUT/spacing FIX --- */
     @media (max-width: 700px) {
-  html, body {
-    height: 100vh !important;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
-  }
-  body {
-    grid-template-columns: 0 1fr 0;
-    grid-template-rows: 10vw 1fr 19vw 8vw 6vw;
-    /* tighter rows, shrunk main-content, increased video area */
-    height: 100vh !important;
-    min-height: 100vh !important;
-    max-height: 100vh !important;
-  }
-  .side-bar-left, .side-bar-right { display: none; }
-  .main-content {
-    padding-top: 0 !important;
-    margin: 0 !important;
-    min-height: 0 !important;
-    height: auto !important;
-  }
-  .logo {
-    max-width: 23vw;
-    margin-top: 0.5vw;
-    margin-bottom: 0vw;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  h1 {
-    font-size: 4.6vw;
-    margin: 1vw 0 1vw 0 !important;
-  }
-  .video-wrapper { margin-top: -10vw; }
-  .video-box { 
-    max-width: 97vw;
-    aspect-ratio: 16 / 6 !important; /* flattest possible */
-    min-height: 0;
-  }
-  .comms-controls { 
-    margin-top: -6vw !important;
-    margin-bottom: 0.5vw !important;
-  }
-  .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
-  .switch-group { font-size: 3vw;}
-  .switch-container { gap: 7vw; margin-top: 0vw; }
-  .toggle-ios { width: 12vw; height: 5vw;}
-  .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
-  .footer-logos { min-height: 4vw; margin-bottom: 0vw;}
-  .footer-logos img { max-width: 18vw; margin-top: 0; margin-bottom: 0vw;}
-  .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
-}
+      html, body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+      }
+      body {
+        grid-template-columns: 0 1fr 0;
+        /*            top   main        video     comms      footer */
+        grid-template-rows: 11vw min-content 43vw min-content 10vw;
+        height: 100vh !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+      }
+      .side-bar-left, .side-bar-right { display: none; }
+      .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+      }
+      .logo { max-width: 24vw; margin-top: 0.7vw; margin-bottom: 1vw; }
+      h1 { font-size: 5vw; margin: 0.7vw 0 0 0 !important;}
+      .video-wrapper { padding: 0; }
+      .video-box { max-width: 98vw; aspect-ratio: 16 / 9 !important; min-height: 0;}
+      .comms-controls { margin-top: 0vw !important; margin-bottom: 0vw !important; padding: 0 !important; }
+      .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
+      .switch-group { font-size: 3vw;}
+      .switch-container { gap: 5vw; margin-top: 1vw; }
+      .toggle-ios { width: 13vw; height: 5vw;}
+      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
+      .footer-logos { min-height: 4vw; margin-bottom: 0vw;}
+      .footer-logos img { max-width: 18vw; margin-top: 0; margin-bottom: 0vw;}
+      .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
+    }
   </style>
 </head>
 <body>
