@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AUAV Archived Streams</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --auav-orange: #f37021;
+      --auav-grey: #4a4a4a;
+      --sidebar-width: 190px;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #fafafa;
+      font-family: 'Inter', sans-serif;
+      color: var(--auav-grey);
+      height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-bottom: 2.5px solid var(--auav-orange);
+      padding: 0 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 10;
+    }
+    .nav-logo img { height: 30px; }
+    .nav-menu { display: flex; gap: 24px;}
+    .nav-item {
+      color: var(--auav-grey); font-weight: 600; font-size: 1.07rem;
+      text-decoration: none; padding: 4px 12px; border-radius: 7px;
+      transition: background .17s;
+    }
+    .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
+
+    .archived-main {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: #fff;
+      border-right: 2.5px solid var(--auav-orange);
+      box-shadow: 0 0 8px rgba(243,112,33,0.03);
+      padding-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sidebar h2 {
+      font-size: 1.07rem;
+      font-weight: 600;
+      color: var(--auav-orange);
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+    .stream-link {
+      background: #f4f4f4;
+      margin-bottom: 14px;
+      padding: 9px 15px;
+      border-radius: 7px;
+      color: var(--auav-grey);
+      font-weight: 500;
+      cursor: pointer;
+      width: 92%;
+      text-align: left;
+      border: 1.3px solid #eee;
+      text-decoration: none;
+      transition: background .14s, border-color .14s;
+    }
+    .stream-link.selected, .stream-link:hover {
+      background: var(--auav-orange);
+      color: #fff;
+      border-color: var(--auav-orange);
+    }
+    .archive-viewer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #fafafa;
+      padding: 30px 0 0 0;
+    }
+    .archive-logo {
+      margin-bottom: 18px;
+    }
+    .archive-logo img {
+      max-width: 190px;
+      height: auto;
+    }
+    .archive-title {
+      font-size: 1.38rem;
+      color: var(--auav-grey);
+      font-weight: 700;
+      margin-bottom: 18px;
+      letter-spacing: 0.01em;
+    }
+    .archive-video-box {
+      width: 92%;
+      max-width: 850px;
+      border-radius: 7px;
+      background: #eaeaea;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.11);
+      overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .archive-video-box video {
+      width: 100%; height: 410px; background: #222; display: block;
+    }
+    @media (max-width: 900px) {
+      .archived-main { flex-direction: column; }
+      .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: 2px solid var(--auav-orange); padding: 12px 0;}
+      .sidebar h2 { margin-bottom: 0; margin-right: 20px;}
+      .stream-link { margin-bottom: 0; margin-right: 8px;}
+      .archive-viewer { padding: 15px 0 0 0;}
+      .archive-logo img { max-width: 110px; }
+      .archive-video-box video { height: 46vw; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo">
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item">Home</a>
+      <a href="archive.html" class="nav-item active">Archived Streams</a>
+    </div>
+  </nav>
+  <div class="archived-main">
+    <div class="sidebar">
+      <h2>Archived Streams</h2>
+      <a href="#" class="stream-link selected" onclick="loadArchive('test')">Archived Stream Test</a>
+      <!-- Add more streams here as you upload more -->
+    </div>
+    <div class="archive-viewer">
+      <div class="archive-logo">
+        <img src="AUAV_INLINE.png" alt="AUAV Logo">
+      </div>
+      <div class="archive-title" id="archive-title">Archived Stream Test</div>
+      <div class="archive-video-box" id="archive-video-box">
+        <video controls poster="Untitled design (2).png">
+          <source id="video-source" src="https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Future ready: in case you add more streams
+    const streams = {
+      "test": {
+        title: "Archived Stream Test",
+        src: "https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y"
+      }
+      // Add more streams like:
+      // , "stream2": { title: "Another Stream", src: "..." }
+    };
+    function loadArchive(id) {
+      document.getElementById('archive-title').textContent = streams[id].title;
+      document.getElementById('video-source').src = streams[id].src;
+      document.querySelector('#archive-video-box video').load();
+      let links = document.querySelectorAll('.stream-link');
+      links.forEach(l => l.classList.remove('selected'));
+      links.forEach(l => { if (l.textContent === streams[id].title) l.classList.add('selected'); });
+    }
+  </script>
+</body>
+</html>
