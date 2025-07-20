@@ -27,7 +27,6 @@
       height: 100vh;
       overflow: hidden;
     }
-    /* NAVBAR */
     .navbar {
       width: 100%;
       height: 48px;
@@ -49,7 +48,6 @@
       transition: background .17s;
     }
     .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
-
     .archived-main {
       display: flex;
       flex: 1;
@@ -115,6 +113,7 @@
       letter-spacing: 0.01em;
     }
     .archive-video-box {
+      position: relative;
       width: 92%;
       max-width: 850px;
       border-radius: 7px;
@@ -122,9 +121,31 @@
       box-shadow: 0 4px 14px rgba(0,0,0,0.11);
       overflow: hidden;
       margin-bottom: 32px;
+      min-height: 240px;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .archive-video-box video {
-      width: 100%; height: 410px; background: #222; display: block;
+      width: 100%; height: 410px; background: #222; display: block; border-radius: 7px;
+    }
+    /* --- Logo Overlay Placeholder --- */
+    .archive-placeholder {
+      position: absolute;
+      z-index: 5;
+      left: 0; right: 0; top: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      pointer-events: none;
+      transition: opacity .22s;
+    }
+    .archive-placeholder img {
+      max-width: 43%;
+      opacity: 0.93;
+      user-select: none;
     }
     @media (max-width: 900px) {
       .archived-main { flex-direction: column; }
@@ -134,6 +155,7 @@
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
       .archive-video-box video { height: 46vw; }
+      .archive-placeholder img { max-width: 68vw; }
     }
   </style>
 </head>
@@ -150,7 +172,7 @@
   <div class="archived-main">
     <div class="sidebar">
       <h2>Archived Streams</h2>
-      <a href="#" class="stream-link selected" onclick="loadArchive('test')">Archived Stream Test</a>
+      <a href="#" class="stream-link selected" id="archivestream-test" onclick="loadArchive('test'); return false;">Archived Stream Test</a>
       <!-- Add more streams here as you upload more -->
     </div>
     <div class="archive-viewer">
@@ -159,7 +181,10 @@
       </div>
       <div class="archive-title" id="archive-title">Archived Stream Test</div>
       <div class="archive-video-box" id="archive-video-box">
-        <video controls poster="Untitled design (2).png">
+        <div class="archive-placeholder" id="archive-placeholder">
+          <img src="Untitled design (2).png" alt="Group Logos">
+        </div>
+        <video id="archive-video" controls poster="">
           <source id="video-source" src="https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -167,23 +192,41 @@
     </div>
   </div>
   <script>
-    // Future ready: in case you add more streams
+    // Streams object, add more here
     const streams = {
       "test": {
         title: "Archived Stream Test",
         src: "https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y"
       }
-      // Add more streams like:
-      // , "stream2": { title: "Another Stream", src: "..." }
+      // Add more streams as needed
     };
     function loadArchive(id) {
       document.getElementById('archive-title').textContent = streams[id].title;
       document.getElementById('video-source').src = streams[id].src;
-      document.querySelector('#archive-video-box video').load();
+      document.getElementById('archive-video').load();
+      // Sidebar highlight
       let links = document.querySelectorAll('.stream-link');
       links.forEach(l => l.classList.remove('selected'));
       links.forEach(l => { if (l.textContent === streams[id].title) l.classList.add('selected'); });
+      // Show overlay again when switching videos
+      placeholder.style.opacity = '1';
     }
+    // Hide placeholder on video play, show on pause or end
+    const video = document.getElementById("archive-video");
+    const placeholder = document.getElementById("archive-placeholder");
+    video.addEventListener("play", () => {
+      placeholder.style.opacity = '0';
+    });
+    video.addEventListener("pause", () => {
+      if (video.currentTime === 0 || video.ended) {
+        placeholder.style.opacity = '1';
+      }
+    });
+    video.addEventListener("ended", () => {
+      placeholder.style.opacity = '1';
+    });
+    // Initial state: show overlay
+    placeholder.style.opacity = '1';
   </script>
 </body>
 </html>
