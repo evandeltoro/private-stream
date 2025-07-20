@@ -35,9 +35,38 @@
       min-height: 100vh;
       max-height: 100vh;
     }
-    .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
+    /* --- NAVBAR --- */
+    .navbar {
+      width: 100vw;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-bottom: 2.5px solid var(--auav-orange);
+      padding: 0 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 10;
+      grid-area: nav;
+    }
+    .nav-logo img { height: 30px; }
+    .nav-menu { display: flex; gap: 24px;}
+    .nav-item {
+      color: var(--auav-grey);
+      font-weight: 600;
+      font-size: 1.07rem;
+      text-decoration: none;
+      padding: 4px 12px;
+      border-radius: 7px;
+      transition: background .17s;
+    }
+    .nav-item.active, .nav-item:hover {
+      background: var(--auav-orange);
+      color: #fff;
+    }
 
-    /* --- NEW FULL-HEIGHT SIDEBARS FOR DESKTOP ONLY --- */
+    /* --- SIDEBARS --- */
     .side-bar-left, .side-bar-right { 
       grid-area: left; 
       background-color: var(--auav-orange);
@@ -57,6 +86,7 @@
     @media (max-width: 700px) {
       .side-bar-left, .side-bar-right { display: none; }
     }
+    .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
 
     .main-content { grid-area: main; text-align: center; padding: 6px 0 0;}
     .logo { max-width: 200px; height: auto;}
@@ -186,6 +216,10 @@
         min-height: 100vh !important;
         max-height: 100vh !important;
       }
+      .navbar { height: 40px; padding: 0 8vw; font-size: 4vw; border-bottom-width: 2px;}
+      .nav-menu { gap: 4vw;}
+      .nav-item { font-size: 3.5vw; padding: 2.5vw 5vw;}
+      .nav-logo img { height: 18px; }
       .side-bar-left, .side-bar-right { display: none; }
       .main-content {
         padding: 0 !important;
@@ -220,6 +254,18 @@
       <div id="pw-error"></div>
     </div>
   </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo">
+    </div>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item active">Home</a>
+      <a href="archive.html" class="nav-item">Archived Streams</a>
+    </div>
+  </nav>
+
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
   <div class="side-bar-right"></div>
