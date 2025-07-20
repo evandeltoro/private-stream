@@ -20,6 +20,54 @@
       color: var(--auav-grey);
       box-sizing: border-box;
     }
+    /* NAVBAR STYLES */
+    .nav-bar {
+      width: 100vw;
+      position: fixed;
+      top: 0; left: 0; z-index: 99999;
+      height: 44px;
+      background: #fff;
+      border-bottom: 2.5px solid var(--auav-orange);
+      display: flex;
+      align-items: center;
+      padding: 0 32px 0 0;
+    }
+    .nav-logo {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      margin-left: 18px;
+    }
+    .nav-logo img {
+      height: 32px;
+      margin-right: 9px;
+    }
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-link {
+      font-size: 1.07rem;
+      color: var(--auav-grey);
+      font-weight: 600;
+      background: none;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background .15s, color .15s;
+      cursor: pointer;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: var(--auav-orange);
+      color: #fff;
+    }
+    /* Push main grid down to make room for navbar */
+    body { padding-top: 44px !important; }
+
+    /* ORIGINAL GRID STYLES FOLLOW... */
     body {
       display: grid;
       grid-template-columns: 20px 1fr 20px;
@@ -35,38 +83,7 @@
       min-height: 100vh;
       max-height: 100vh;
     }
-    /* --- NAVBAR --- */
-    .navbar {
-      width: 100vw;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      border-bottom: 2.5px solid var(--auav-orange);
-      padding: 0 24px;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 10;
-      grid-area: nav;
-    }
-    .nav-logo img { height: 30px; }
-    .nav-menu { display: flex; gap: 24px;}
-    .nav-item {
-      color: var(--auav-grey);
-      font-weight: 600;
-      font-size: 1.07rem;
-      text-decoration: none;
-      padding: 4px 12px;
-      border-radius: 7px;
-      transition: background .17s;
-    }
-    .nav-item.active, .nav-item:hover {
-      background: var(--auav-orange);
-      color: #fff;
-    }
-
-    /* --- SIDEBARS --- */
+    .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
     .side-bar-left, .side-bar-right { 
       grid-area: left; 
       background-color: var(--auav-orange);
@@ -86,8 +103,6 @@
     @media (max-width: 700px) {
       .side-bar-left, .side-bar-right { display: none; }
     }
-    .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
-
     .main-content { grid-area: main; text-align: center; padding: 6px 0 0;}
     .logo { max-width: 200px; height: auto;}
     h1 { font-size: 1.25rem; margin: 7px 0 10px;}
@@ -216,34 +231,23 @@
         min-height: 100vh !important;
         max-height: 100vh !important;
       }
-      .navbar { height: 40px; padding: 0 8vw; font-size: 4vw; border-bottom-width: 2px;}
-      .nav-menu { gap: 4vw;}
-      .nav-item { font-size: 3.5vw; padding: 2.5vw 5vw;}
-      .nav-logo img { height: 18px; }
-      .side-bar-left, .side-bar-right { display: none; }
-      .main-content {
-        padding: 0 !important;
-        margin: 0 !important;
-        min-height: 0 !important;
-        height: auto !important;
-      }
-      .logo { max-width: 24vw; margin-top: 0.7vw; margin-bottom: 1vw; }
-      h1 { font-size: 5vw; margin: 0.7vw 0 0 0 !important;}
-      .video-wrapper { padding: 0; }
-      .video-box { max-width: 98vw; aspect-ratio: 16 / 9 !important; min-height: 0;}
-      .comms-controls { margin-top: 0vw !important; margin-bottom: 0vw !important; padding: 0 !important; }
-      .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
-      .switch-group { font-size: 3vw;}
-      .switch-container { gap: 5vw; margin-top: 1vw; }
-      .toggle-ios { width: 13vw; height: 5vw;}
-      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
-      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 0vw;}
-      .footer-logos img { max-width: 36vw !important; margin-top: 0; margin-bottom: 0vw;}
-      .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
+      .nav-bar { position: static; border-bottom: none; height: 40px; padding: 0 7px 0 0;}
+      .nav-logo img { height: 26px; }
+      .footer-logos img { max-width: 36vw !important;}
     }
   </style>
 </head>
 <body>
+  <!-- NAVBAR DROPDOWN -->
+  <div class="nav-bar">
+    <div class="nav-logo">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo"><span style="font-weight:700; font-size:1.16rem; color:var(--auav-grey);letter-spacing:0.02em;">AUAV</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="archive.html" class="nav-link">Archived Streams</a>
+    </div>
+  </div>
   <!-- Password Overlay -->
   <div id="password-overlay">
     <div id="pw-box">
@@ -254,18 +258,6 @@
       <div id="pw-error"></div>
     </div>
   </div>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="nav-logo">
-      <img src="AUAV_INLINE.png" alt="AUAV Logo">
-    </div>
-    <div class="nav-menu">
-      <a href="index.html" class="nav-item active">Home</a>
-      <a href="archive.html" class="nav-item">Archived Streams</a>
-    </div>
-  </nav>
-
   <div class="top-bar"></div>
   <div class="side-bar-left"></div>
   <div class="side-bar-right"></div>
