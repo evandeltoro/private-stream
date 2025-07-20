@@ -113,7 +113,6 @@
       letter-spacing: 0.01em;
     }
     .archive-video-box {
-      position: relative;
       width: 92%;
       max-width: 850px;
       border-radius: 7px;
@@ -130,22 +129,38 @@
     .archive-video-box video {
       width: 100%; height: 410px; background: #222; display: block; border-radius: 7px;
     }
-    /* --- Logo Overlay Placeholder --- */
-    .archive-placeholder {
-      position: absolute;
-      z-index: 5;
-      left: 0; right: 0; top: 0; bottom: 0;
+    /* Footer Logos and Sticky Footer */
+    .footer-logos {
+      width: 100vw;
       display: flex;
-      align-items: center;
       justify-content: center;
-      background: none;
-      pointer-events: none;
-      transition: opacity .22s;
+      align-items: flex-end;
+      min-height: 55px;
+      margin-bottom: 5px;
+      margin-top: 0;
+      z-index: 9999;
     }
-    .archive-placeholder img {
-      max-width: 43%;
-      opacity: 0.93;
-      user-select: none;
+    .footer-logos img {
+      max-width: 250px;
+      height: auto;
+      margin-top: 0;
+      margin-bottom: 3px;
+    }
+    .sticky-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--auav-orange);
+      color: #fff;
+      font-size: 0.97rem;
+      text-align: center;
+      z-index: 10000;
+      padding: 7px 0 5px 0;
+      letter-spacing: 0.01em;
+      box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.07);
+      font-weight: 600;
+      width: 100vw;
     }
     @media (max-width: 900px) {
       .archived-main { flex-direction: column; }
@@ -155,7 +170,7 @@
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
       .archive-video-box video { height: 46vw; }
-      .archive-placeholder img { max-width: 68vw; }
+      .footer-logos img { max-width: 36vw !important; }
     }
   </style>
 </head>
@@ -181,15 +196,18 @@
       </div>
       <div class="archive-title" id="archive-title">Archived Stream Test</div>
       <div class="archive-video-box" id="archive-video-box">
-        <div class="archive-placeholder" id="archive-placeholder">
-          <img src="Untitled design (2).png" alt="Group Logos">
-        </div>
         <video id="archive-video" controls poster="">
           <source id="video-source" src="https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y" type="video/mp4">
           Your browser does not support the video tag.
         </video>
       </div>
     </div>
+  </div>
+  <div class="footer-logos">
+    <img src="Untitled design (2).png" alt="Group Logos">
+  </div>
+  <div class="sticky-footer">
+    © 2025 AUAV — Test Stream Environment
   </div>
   <script>
     // Streams object, add more here
@@ -208,25 +226,7 @@
       let links = document.querySelectorAll('.stream-link');
       links.forEach(l => l.classList.remove('selected'));
       links.forEach(l => { if (l.textContent === streams[id].title) l.classList.add('selected'); });
-      // Show overlay again when switching videos
-      placeholder.style.opacity = '1';
     }
-    // Hide placeholder on video play, show on pause or end
-    const video = document.getElementById("archive-video");
-    const placeholder = document.getElementById("archive-placeholder");
-    video.addEventListener("play", () => {
-      placeholder.style.opacity = '0';
-    });
-    video.addEventListener("pause", () => {
-      if (video.currentTime === 0 || video.ended) {
-        placeholder.style.opacity = '1';
-      }
-    });
-    video.addEventListener("ended", () => {
-      placeholder.style.opacity = '1';
-    });
-    // Initial state: show overlay
-    placeholder.style.opacity = '1';
   </script>
 </body>
 </html>
