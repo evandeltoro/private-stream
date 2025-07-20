@@ -10,156 +10,6 @@
       --auav-orange: #f37021;
       --auav-grey: #4a4a4a;
       --sidebar-width: 190px;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #fafafa;
-      font-family: 'Inter', sans-serif;
-      color: var(--auav-grey);
-      height: 100vh;
-      width: 100vw;
-      box-sizing: border-box;
-    }
-    body {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .navbar {
-      width: 100%;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #fff;
-      border-bottom: 2.5px solid var(--auav-orange);
-      padding: 0 24px;
-      box-sizing: border-box;
-      position: relative;
-      z-index: 10;
-    }
-    .nav-logo img { height: 30px; }
-    .nav-menu { display: flex; gap: 24px;}
-    .nav-item {
-      color: var(--auav-grey); font-weight: 600; font-size: 1.07rem;
-      text-decoration: none; padding: 4px 12px; border-radius: 7px;
-      transition: background .17s;
-    }
-    .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
-    .archived-main {
-      display: flex;
-      flex: 1;
-      min-height: 0;
-    }
-    .sidebar {
-      width: var(--sidebar-width);
-      background: #fff;
-      border-right: 2.5px solid var(--auav-orange);
-      box-shadow: 0 0 8px rgba(243,112,33,0.03);
-      padding-top: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .sidebar h2 {
-      font-size: 1.07rem;
-      font-weight: 600;
-      color: var(--auav-orange);
-      margin-bottom: 18px;
-      letter-spacing: 0.02em;
-    }
-    .stream-link {
-      background: #f4f4f4;
-      margin-bottom: 14px;
-      padding: 9px 15px;
-      border-radius: 7px;
-      color: var(--auav-grey);
-      font-weight: 500;
-      cursor: pointer;
-      width: 92%;
-      text-align: left;
-      border: 1.3px solid #eee;
-      text-decoration: none;
-      transition: background .14s, border-color .14s;
-    }
-    .stream-link.selected, .stream-link:hover {
-      background: var(--auav-orange);
-      color: #fff;
-      border-color: var(--auav-orange);
-    }
-    .archive-viewer {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      background: #fafafa;
-      padding: 30px 0 0 0;
-    }
-    .archive-logo {
-      margin-bottom: 18px;
-    }
-    .archive-logo img {
-      max-width: 190px;
-      height: auto;
-    }
-    .archive-title {
-      font-size: 1.38rem;
-      color: var(--auav-grey);
-      font-weight: 700;
-      margin-bottom: 18px;
-      letter-spacing: 0.01em;
-    }
-    .archive-video-box {
-      width: 92%;
-      max-width: 850px;
-      border-radius: 7px;
-      background: #eaeaea;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.11);
-      overflow: hidden;
-      margin-bottom: 32px;
-      min-height: 240px;
-      aspect-ratio: 16 / 9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .archive-video-box video {
-      width: 100%; height: 410px; background: #222; display: block; border-radius: 7px;
-    }
-    /* Footer Logos and Sticky Footer */
-    .footer-logos {
-      width: 100vw;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      min-height: 55px;
-      margin-bottom: 5px;
-      margin-top: 0;
-      z-index: 9999;
-    }
-    .footer-logos img {
-      max-width: 250px;
-      height: auto;
-      margin-top: 0;
-      margin-bottom: 3px;
-    }
-    .sticky-footer {
-      position: fixed;
-      left: 0;<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>AUAV Archived Streams</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --auav-orange: #f37021;
-      --auav-grey: #4a4a4a;
-      --sidebar-width: 190px;
       --footer-height: 40px;
       --footer-logos-height: 65px;
     }
@@ -202,12 +52,13 @@
     .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
     .archived-main {
       display: flex;
-      flex: 1;
+      flex: 1 1 auto;
       min-height: 0;
-      height: calc(100vh - 48px - var(--footer-height) - var(--footer-logos-height));
-      /* nav + sticky footer + logo bar */
+      height: calc(100vh - 48px - var(--footer-height));
+      /* nav + sticky footer */
       box-sizing: border-box;
       overflow: hidden;
+      position: relative;
     }
     .sidebar {
       width: var(--sidebar-width);
@@ -221,7 +72,8 @@
       height: 100%;
       box-sizing: border-box;
       overflow-y: auto;
-      /* ensures scroll if too many streams */
+      position: relative;
+      z-index: 3;
     }
     .sidebar h2 {
       font-size: 1.07rem;
@@ -229,6 +81,8 @@
       color: var(--auav-orange);
       margin-bottom: 18px;
       letter-spacing: 0.02em;
+      width: 100%;
+      text-align: center;
     }
     .stream-link {
       background: #f4f4f4;
@@ -250,7 +104,7 @@
       border-color: var(--auav-orange);
     }
     .archive-viewer {
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -260,6 +114,8 @@
       height: 100%;
       box-sizing: border-box;
       overflow: auto;
+      position: relative;
+      z-index: 2;
     }
     .archive-logo {
       margin-bottom: 18px;
@@ -292,24 +148,28 @@
     .archive-video-box video {
       width: 100%; height: 410px; background: #222; display: block; border-radius: 7px;
     }
-    /* Centered footer logos below the video box */
+    /* Centered footer logos now full width, no left/right margin or white space */
     .footer-logos {
-      width: 100%;
+      width: 100vw;
       display: flex;
       justify-content: center;
       align-items: flex-end;
       height: var(--footer-logos-height);
       margin-bottom: 0;
       margin-top: 0;
-      position: relative;
+      position: absolute;
+      left: 0; right: 0;
+      bottom: var(--footer-height);
       background: transparent;
-      z-index: 20;
+      z-index: 2;
+      pointer-events: none; /* allows sidebar clicks over logo */
     }
     .footer-logos img {
-      max-width: 250px;
+      width: 480px; /* Use a fixed width so it stretches edge to edge */
+      max-width: 100vw;
       height: auto;
-      margin-top: 0;
-      margin-bottom: 3px;
+      margin: 0;
+      display: block;
     }
     /* Sticky footer always at very bottom */
     .sticky-footer {
@@ -337,7 +197,7 @@
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
       .archive-video-box video { height: 46vw; }
-      .footer-logos img { max-width: 36vw !important; }
+      .footer-logos img { width: 98vw !important; }
       .footer-logos { height: 12vw !important;}
       .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0; height: 8vw;}
     }
@@ -370,10 +230,10 @@
           Your browser does not support the video tag.
         </video>
       </div>
-      <!-- Centered Footer Logos, now just below video, not blocking anything -->
-      <div class="footer-logos">
-        <img src="Untitled design (2).png" alt="Group Logos">
-      </div>
+    </div>
+    <!-- Full width footer logos are now here, overlaying bottom of page -->
+    <div class="footer-logos">
+      <img src="Untitled design (2).png" alt="Group Logos">
     </div>
   </div>
   <div class="sticky-footer">
@@ -386,7 +246,6 @@
         title: "Archived Stream Test",
         src: "https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y"
       }
-      // Add more streams as needed
     };
     function loadArchive(id) {
       document.getElementById('archive-title').textContent = streams[id].title;
