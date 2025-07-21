@@ -10,6 +10,7 @@
       --auav-orange: #f37021;
       --auav-grey: #4a4a4a;
       --sidebar-width: 220px;
+      --border-thick: 2.5px;
     }
     html, body {
       margin: 0;
@@ -35,7 +36,7 @@
       align-items: center;
       justify-content: space-between;
       background: #fff;
-      border-bottom: 2.5px solid var(--auav-orange);
+      border-bottom: var(--border-thick) solid var(--auav-orange);
       padding: 0 24px;
       box-sizing: border-box;
       position: relative;
@@ -58,40 +59,35 @@
     .sidebar {
       width: var(--sidebar-width);
       background: #fff;
-      border-right: 2.5px solid var(--auav-orange);
+      border-right: var(--border-thick) solid var(--auav-orange);
       box-shadow: 0 0 8px rgba(243,112,33,0.03);
-      padding-top: 8px;        /* << Tighter to top */
+      padding-top: 8px;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       position: relative;
+      z-index: 2;
     }
     .sidebar h2 {
-      font-size: 1.25rem;
+      font-size: 1.13rem;
       font-weight: 700;
       color: var(--auav-orange);
-      margin-bottom: 2px;      /* << Raised heading up */
+      margin-bottom: 5px;
       margin-top: 0;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
       width: 100%;
       text-align: left;
       padding-left: 16px;
       box-sizing: border-box;
     }
     .sidebar-separator {
-      width: 100vw;
-      max-width: none;
-      height: 6px;
+      width: 100%;
+      height: var(--border-thick);
       background: var(--auav-orange);
       border: none;
-      margin: 0 0 16px 0;
-      position: absolute;
-      left: 0;
-      top: 36px; /* below heading (adjust if needed) */
-      z-index: 2;
+      margin: 0 0 10px 0;
     }
     .sidebar-streams {
-      margin-top: 42px; /* space after the separator */
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -100,29 +96,26 @@
       position: relative;
     }
     .stream-link {
-      background: #f37021;
+      background: #fff;
       margin-bottom: 0;
-      padding: 19px 15px 17px 15px;
+      padding: 13px 15px 13px 16px;
       border-radius: 0;
-      color: #fff;
+      color: var(--auav-orange);
       font-weight: 600;
       cursor: pointer;
       width: 100%;
       text-align: left;
       border: none;
       text-decoration: none;
-      font-size: 1.55rem;
-      transition: background .14s, border-color .14s;
-    }
-    .stream-link:not(.selected) {
-      background: #fff;
-      color: var(--auav-orange);
-      border-bottom: 2px solid #f37021;
-      font-weight: 600;
+      font-size: 1.06rem;
+      transition: background .14s, color .14s;
+      border-bottom: 1px solid #f2f2f2;
+      box-sizing: border-box;
     }
     .stream-link.selected, .stream-link:hover {
       background: var(--auav-orange);
       color: #fff;
+      border-bottom: 1px solid var(--auav-orange);
     }
     .archive-viewer {
       flex: 1;
@@ -163,10 +156,10 @@
     }
     @media (max-width: 900px) {
       .archived-main { flex-direction: column; }
-      .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: 2px solid var(--auav-orange); padding: 12px 0;}
+      .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: var(--border-thick) solid var(--auav-orange); padding: 12px 0;}
       .sidebar h2 { margin-bottom: 0; margin-right: 20px;}
-      .sidebar-separator { width: 100vw; left: 0; top: 46px;}
-      .sidebar-streams { flex-direction: row; width: 100vw; margin-top: 54px;}
+      .sidebar-separator { width: 100vw; left: 0;}
+      .sidebar-streams { flex-direction: row; width: 100vw; margin-top: 0;}
       .stream-link { width: auto; min-width: 90px; font-size: 1.08rem; padding: 9px 13px 9px 13px;}
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
