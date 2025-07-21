@@ -20,12 +20,12 @@
       height: 100vh;
       width: 100vw;
       box-sizing: border-box;
+      overflow-x: hidden;
     }
     body {
       display: flex;
       flex-direction: column;
       height: 100vh;
-      overflow: hidden;
     }
     /* NAVBAR */
     .navbar {
@@ -49,6 +49,8 @@
       transition: background .17s;
     }
     .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
+
+    /* MAIN LAYOUT */
     .archived-main {
       display: flex;
       flex: 1;
@@ -65,6 +67,7 @@
       align-items: center;
       position: relative;
       z-index: 2;
+      transition: left 0.3s;
     }
     .sidebar-title {
       font-size: 1.17rem;
@@ -115,6 +118,7 @@
       background: #fafafa;
       padding: 30px 0 0 0;
       overflow: auto;
+      width: 100%;
     }
     .archive-logo {
       margin-bottom: 18px;
@@ -130,6 +134,8 @@
       font-weight: 700;
       margin-bottom: 18px;
       letter-spacing: 0.01em;
+      text-align: center;
+      width: 100%;
     }
     .archive-video-box {
       width: 92%;
@@ -151,15 +157,94 @@
       display: block;
       background: #222;
     }
+    /* ===== MOBILE OVERRIDES ===== */
     @media (max-width: 900px) {
       .archived-main { flex-direction: column; }
-      .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: 2px solid var(--auav-orange); padding: 12px 0;}
+      .sidebar {
+        flex-direction: column;
+        width: 80vw;
+        min-width: 170px;
+        max-width: 270px;
+        height: 100vh;
+        border-right: none;
+        border-bottom: 2.5px solid var(--auav-orange);
+        padding: 20px 0 0 0;
+        box-shadow: 2px 0 14px rgba(0,0,0,0.12);
+        position: fixed;
+        left: -110vw; /* Hidden by default */
+        top: 48px;
+        z-index: 999;
+        background: #fff;
+        transition: left 0.33s cubic-bezier(0.56,0,0.26,1);
+      }
+      .sidebar.open {
+        left: 0;
+      }
       .sidebar-title { margin-bottom: 0; margin-right: 20px;}
       .sidebar-divider { margin-bottom: 0; }
       .stream-link { margin-bottom: 0; margin-right: 8px;}
-      .archive-viewer { padding: 15px 0 0 0;}
-      .archive-logo img { max-width: 110px; }
-      .archive-video-box iframe { height: 46vw; }
+      .archive-viewer { padding: 10vw 0 0 0; align-items: center; }
+      .archive-logo img { max-width: 80px; }
+      .archive-title {
+        font-size: 6vw;
+        margin-top: 5vw;
+        margin-bottom: 3vw;
+        text-align: center;
+      }
+      .archive-video-box {
+        width: 97vw;
+        min-width: 0;
+        max-width: 99vw;
+        margin-bottom: 18px;
+        margin-left: auto;
+        margin-right: auto;
+        min-height: unset;
+        border-radius: 14px;
+      }
+      .archive-video-box iframe {
+        width: 95vw !important;
+        height: 54vw !important;
+        min-height: 160px;
+        max-width: 98vw;
+        border-radius: 14px;
+      }
+      /* Overlay for menu */
+      #sidebar-overlay {
+        display: none;
+        position: fixed;
+        left: 0; top: 0; width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.15);
+        z-index: 998;
+      }
+      #sidebar-overlay.open {
+        display: block;
+      }
+      /* Arrow button */
+      .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        left: 12px;
+        top: 8px;
+        width: 38px; height: 38px;
+        z-index: 1001;
+        background: #fff;
+        border: 2px solid var(--auav-orange);
+        border-radius: 8px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: background 0.13s;
+      }
+      .sidebar-toggle svg {
+        width: 23px; height: 23px; display: block;
+      }
+      /* Center the nav menu on mobile */
+      .nav-menu {
+        margin-left: auto;
+        margin-right: 0;
+        gap: 8px;
+      }
     }
   </style>
 </head>
@@ -168,18 +253,23 @@
     <div class="nav-logo">
       <img src="AUAV_INLINE.png" alt="AUAV Logo">
     </div>
+    <button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Show menu" style="display:none;">
+      <!-- Arrow SVG -->
+      <svg viewBox="0 0 20 20" fill="none"><path d="M14 5l-5 5 5 5" stroke="#f37021" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
     <div class="nav-menu">
       <a href="index.html" class="nav-item">Home</a>
       <a href="archive.html" class="nav-item active">Archived Streams</a>
     </div>
   </nav>
+  <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
   <div class="archived-main">
-    <div class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <span class="sidebar-title">Archived Streams</span>
       <div class="sidebar-divider"></div>
       <a href="#" class="stream-link selected" onclick="loadArchive('test'); return false;">Archived Stream Test</a>
       <!-- Add more streams here as you upload more -->
-    </div>
+    </aside>
     <div class="archive-viewer">
       <div class="archive-title" id="archive-title">Archived Stream Test</div>
       <div class="archive-video-box" id="archive-video-box">
@@ -195,13 +285,12 @@
     </div>
   </div>
   <script>
-    // If you add more streams, add them here:
+    // Stream loader (unchanged)
     const streams = {
       "test": {
         title: "Archived Stream Test",
         yt: "b-fOIuMdsyg"
       }
-      // Add more: , "stream2": { title: "Name", yt: "YouTubeVideoID" }
     };
     function loadArchive(id) {
       document.getElementById('archive-title').textContent = streams[id].title;
@@ -209,7 +298,32 @@
       let links = document.querySelectorAll('.stream-link');
       links.forEach(l => l.classList.remove('selected'));
       links.forEach(l => { if (l.textContent.trim() === streams[id].title) l.classList.add('selected'); });
+      // Close menu after selection (mobile only)
+      if(window.innerWidth < 900) toggleSidebar(false);
     }
+    // Sidebar mobile toggle logic
+    function toggleSidebar(force) {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      let isOpen = sidebar.classList.contains('open');
+      if (typeof force === "boolean") isOpen = !force;
+      sidebar.classList.toggle('open', !isOpen);
+      overlay.classList.toggle('open', !isOpen);
+    }
+    // Show arrow button only on mobile
+    function handleResize() {
+      const btn = document.querySelector('.sidebar-toggle');
+      if(window.innerWidth < 900) {
+        btn.style.display = '';
+      } else {
+        btn.style.display = 'none';
+        // Also ensure sidebar/overlay are closed
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebar-overlay').classList.remove('open');
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize();
   </script>
 </body>
 </html>
