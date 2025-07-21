@@ -2,29 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AUAV Archived Streams</title>
+  <title>AUAV Private Stream</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/ovenplayer/dist/ovenplayer.js"></script>
   <style>
     :root {
       --auav-orange: #f37021;
       --auav-grey: #4a4a4a;
-      --sidebar-width: 190px;
     }
     html, body {
       margin: 0;
       padding: 0;
-      background: #fafafa;
-      font-family: 'Inter', sans-serif;
-      color: var(--auav-grey);
       height: 100vh;
-      width: 100vw;
+      font-family: 'Inter', sans-serif;
+      background: #fafafa;
+      color: var(--auav-grey);
       box-sizing: border-box;
     }
     body {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+      min-height: 100vh;
+      max-height: 100vh;
       overflow: hidden;
     }
     /* NAVBAR */
@@ -41,6 +39,11 @@
       position: relative;
       z-index: 10;
     }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .nav-logo img { height: 30px; }
     .nav-menu { display: flex; gap: 24px;}
     .nav-item {
@@ -50,168 +53,335 @@
     }
     .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
 
-    .archived-main {
-      display: flex;
-      flex: 1;
-      min-height: 0;
+    /* Main grid layout below navbar */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 20px 1fr 20px;
+      grid-template-rows: auto auto 1fr auto auto;
+      grid-template-areas:
+        "left main right"
+        "left stream right"
+        "left comms right"
+        "left footer right";
+      height: calc(100vh - 48px);
+      min-height: calc(100vh - 48px);
+      max-height: calc(100vh - 48px);
+      overflow: hidden;
     }
-    .sidebar {
-      width: var(--sidebar-width);
-      background: #fff;
-      border-right: 2.5px solid var(--auav-orange);
-      box-shadow: 0 0 8px rgba(243,112,33,0.03);
-      padding-top: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100%;
-      min-height: 0;
+    .side-bar-left, .side-bar-right { background-color: var(--auav-orange); }
+    .side-bar-left { grid-column: 1; grid-row: 1 / span 5; }
+    .side-bar-right { grid-column: 3; grid-row: 1 / span 5; }
+
+    @media (min-width: 701px) {
+      .side-bar-left, .side-bar-right {
+        position: fixed;
+        top: 48px;
+        bottom: 0;
+        width: 20px;
+        z-index: 1;
+        background-color: var(--auav-orange);
+      }
+      .side-bar-left { left: 0; }
+      .side-bar-right { right: 0; }
     }
-    .sidebar h2 {
-      font-size: 1.07rem;
-      font-weight: 600;
-      color: #222;
-      margin-bottom: 8px;
-      letter-spacing: 0.02em;
-      width: 100%;
-      text-align: center;
+    @media (max-width: 700px) {
+      .side-bar-left, .side-bar-right { display: none; }
+      .main-grid { grid-template-columns: 0 1fr 0; }
     }
-    .sidebar .sidebar-divider {
-      width: 100%;
-      height: 3px;
-      background: var(--auav-orange);
-      margin-bottom: 13px;
-      border: none;
-      margin-left: 0;
-      margin-right: 0;
-    }
-    .stream-link {
-      background: #f4f4f4;
-      margin-bottom: 14px;
-      padding: 9px 15px;
-      border-radius: 7px;
-      color: var(--auav-grey);
-      font-weight: 500;
-      cursor: pointer;
-      width: 92%;
-      text-align: center;
-      border: 1.3px solid #eee;
-      text-decoration: none;
-      transition: background .14s, border-color .14s;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .stream-link.selected, .stream-link:hover {
+
+    .main-content { grid-column: 2; grid-row: 1; text-align: center; padding: 16px 0 0;}
+    /* .logo { max-width: 200px; height: auto;} -- Logo removed from here */
+    h1 { font-size: 1.25rem; margin: 7px 0 10px;}
+    .video-wrapper { grid-column: 2; grid-row: 2; display: flex; justify-content: center; align-items: center; padding: 0 6px;}
+    .video-box { position: relative; width: 100%; max-width: 650px; aspect-ratio: 16 / 9; background: #000; border: 2px solid #000; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
+    iframe { position: absolute; width: 100%; height: 100%; border: none; border-radius: 6px;}
+    .comms-controls { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; align-items: center; padding: 7px;}
+    .comms-controls h3 { font-size: 1.08rem; margin-bottom: 8px;}
+    .switch-container { display: flex; gap: 22px; margin-top: 3px; align-items: center;}
+    .switch-group { display: flex; flex-direction: column; align-items: center; font-weight: bold; font-size: 0.97rem;}
+    .toggle-ios { position: relative; display: inline-block; width: 56px; height: 28px;}
+    .toggle-ios input { opacity: 0; width: 0; height: 0;}
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;}
+    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
+    input:checked + .slider { background-color: var(--auav-orange);}
+    input:checked + .slider:before { transform: translateX(24px);}
+    .slider::after { content: "OFF"; color: white; font-size: 10px; font-weight: bold; position: absolute; top: 5px; right: 8px; transition: .4s;}
+    input:checked + .slider::after { content: "ON"; left: 8px; right: auto;}
+    .footer-logos { grid-column: 2; grid-row: 4; display: flex; justify-content: center; align-items: flex-end; min-height: 55px;}
+    .footer-logos img { max-width: 250px; height: auto; margin-top: 0; margin-bottom: 3px;}
+    .sticky-footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
       background: var(--auav-orange);
       color: #fff;
-      border-color: var(--auav-orange);
+      font-size: 0.97rem;
+      text-align: center;
+      z-index: 10000;
+      padding: 7px 0 5px 0;
+      letter-spacing: 0.01em;
+      box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.07);
+      font-weight: 600;
+      width: 100vw;
     }
-    .archive-viewer {
-      flex: 1;
+
+    /* Password Overlay: FULLSCREEN, BLUR & LOCKOUT */
+    #password-overlay {
+      position: fixed;
+      z-index: 99999;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(250, 250, 250, 0.93);
+      backdrop-filter: blur(10px) brightness(0.97);
+      -webkit-backdrop-filter: blur(10px) brightness(0.97);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      pointer-events: all;
+    }
+    body.locked > *:not(#password-overlay) {
+      filter: blur(8px) brightness(0.85);
+      pointer-events: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+    }
+    #pw-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px 0 rgba(0,0,0,0.15);
+      padding: 32px 22px 20px 22px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      background: #fafafa;
-      padding: 30px 0 0 0;
-      min-width: 0;
+      min-width: 220px;
+      border-top: 8px solid var(--auav-orange);
+      z-index: 999999;
     }
-    .archive-logo {
-      margin-bottom: 18px;
+    #pw-box img {
+      width: 90px;
+      margin-bottom: 13px;
     }
-    .archive-logo img {
-      max-width: 190px;
-      height: auto;
-    }
-    .archive-title {
-      font-size: 1.38rem;
+    #pw-box h2 {
+      margin: 0 0 14px 0;
+      font-weight: 600;
+      font-size: 1.09rem;
       color: var(--auav-grey);
-      font-weight: 700;
-      margin-bottom: 18px;
-      letter-spacing: 0.01em;
-      text-align: center;
+      letter-spacing: 0.02em;
     }
-    .archive-video-box {
-      width: 92%;
-      max-width: 850px;
+    #pw-input {
+      padding: 7px 12px;
+      border: 1.5px solid var(--auav-orange);
       border-radius: 7px;
-      background: #eaeaea;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.11);
-      overflow: hidden;
-      margin-bottom: 32px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 410px;
-    }
-    .archive-video-box iframe {
+      font-size: 0.94rem;
       width: 100%;
-      height: 410px;
+      margin-bottom: 8px;
+      transition: border-color 0.3s;
+    }
+    #pw-input:focus {
+      outline: none;
+      border-color: #fd9827;
+    }
+    #pw-btn {
+      background: var(--auav-orange);
+      color: #fff;
       border: none;
       border-radius: 7px;
-      display: block;
-      background: #222;
+      padding: 7px 22px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      margin-bottom: 2px;
+      margin-top: 6px;
+      transition: background 0.2s;
     }
-    @media (max-width: 900px) {
-      .archived-main { flex-direction: column; }
-      .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: 2px solid var(--auav-orange); padding: 12px 0;}
-      .sidebar h2 { margin-bottom: 0; margin-right: 20px;}
-      .sidebar .sidebar-divider { margin-bottom: 0;}
-      .stream-link { margin-bottom: 0; margin-right: 8px;}
-      .archive-viewer { padding: 15px 0 0 0;}
-      .archive-logo img { max-width: 110px; }
-      .archive-video-box iframe { height: 46vw; }
+    #pw-btn:active {
+      background: #ff9932;
+    }
+    #pw-error {
+      color: #c4432c;
+      font-size: 0.95rem;
+      min-height: 18px;
+      margin-top: 2px;
+    }
+    /* --- MOBILE LAYOUT/spacing FIX --- */
+    @media (max-width: 700px) {
+      html, body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+      }
+      .main-grid {
+        grid-template-columns: 0 1fr 0;
+        grid-template-rows:
+          11vw
+          min-content
+          13vw
+          43vw
+          12vw
+          14vw
+          48vw
+          8vw;
+        height: calc(100vh - 48px) !important;
+        min-height: calc(100vh - 48px) !important;
+        max-height: calc(100vh - 48px) !important;
+      }
+      .side-bar-left, .side-bar-right { display: none; }
+      .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+      }
+      /* .logo { max-width: 24vw; margin-top: 0.7vw; margin-bottom: 1vw; } -- Logo removed */
+      h1 { font-size: 5vw; margin: 0.7vw 0 0 0 !important;}
+      .video-wrapper { padding: 0; }
+      .video-box { max-width: 98vw; aspect-ratio: 16 / 9 !important; min-height: 0;}
+      .comms-controls { margin-top: 0vw !important; margin-bottom: 0vw !important; padding: 0 !important; }
+      .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
+      .switch-group { font-size: 3vw;}
+      .switch-container { gap: 5vw; margin-top: 1vw; }
+      .toggle-ios { width: 13vw; height: 5vw;}
+      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
+      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 0vw;}
+      .footer-logos img { max-width: 36vw !important; margin-top: 0; margin-bottom: 0vw;}
+      .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
     }
   </style>
 </head>
-<body>
+<body class="locked">
+  <!-- Password Overlay -->
+  <div id="password-overlay">
+    <div id="pw-box">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo" />
+      <h2>Enter Password to Access</h2>
+      <input type="password" id="pw-input" placeholder="Password" autocomplete="off" />
+      <button id="pw-btn">Enter</button>
+      <div id="pw-error"></div>
+    </div>
+  </div>
+  <!-- NAVBAR - always present, blurred when locked -->
   <nav class="navbar">
     <div class="nav-logo">
       <img src="AUAV_INLINE.png" alt="AUAV Logo">
     </div>
     <div class="nav-menu">
-      <a href="index.html" class="nav-item">Home</a>
-      <a href="archive.html" class="nav-item active">Archived Streams</a>
+      <a href="index.html" class="nav-item active">Home</a>
+      <a href="archive.html" class="nav-item">Archived Streams</a>
     </div>
   </nav>
-  <div class="archived-main">
-    <div class="sidebar">
-      <h2>Archived Streams</h2>
-      <div class="sidebar-divider"></div>
-      <a href="#" class="stream-link selected" onclick="loadArchive('test')">Archived Stream Test</a>
-      <!-- Add more streams here as you upload more -->
+  <div class="main-grid">
+    <div class="side-bar-left"></div>
+    <div class="side-bar-right"></div>
+    <div class="main-content">
+      <h1>Private Livestream</h1>
     </div>
-    <div class="archive-viewer">
-      <div class="archive-title" id="archive-title">Archived Stream Test</div>
-      <div class="archive-video-box" id="archive-video-box">
-        <iframe id="archive-video"
-          src="https://www.youtube.com/embed/b-fOIuMdsyg"
-          title="Archived Stream Test"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
+    <div class="video-wrapper">
+      <div class="video-box">
+        <iframe
+          src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar-apl.netlify.app"
+          allowfullscreen
+          loading="lazy">
         </iframe>
       </div>
     </div>
+    <div class="comms-controls">
+      <h3>Communication Controls</h3>
+      <div class="switch-container">
+        <div class="switch-group">
+          <label class="toggle-ios">
+            <input type="checkbox" checked onchange="toggleComms()">
+            <span class="slider"></span>
+          </label>
+          <span>Audio</span>
+        </div>
+        <div class="switch-group">
+          <label class="toggle-ios">
+            <input type="checkbox" onchange="handleMicToggle(this.checked)">
+            <span class="slider"></span>
+          </label>
+          <span>Mic</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-logos">
+      <img src="Untitled design (2).png" alt="Group Logos">
+    </div>
   </div>
+  <div class="sticky-footer">
+    © 2025 AUAV — Test Stream Environment
+  </div>
+  <div id="comms"></div>
   <script>
-    // Add more streams as needed!
-    const streams = {
-      "test": {
-        title: "Archived Stream Test",
-        // Just put the YouTube video ID at the end:
-        youtubeId: "b-fOIuMdsyg"
+    // Password overlay logic (remembers session)
+    const PASSWORD = "Shell123";
+    const overlay = document.getElementById('password-overlay');
+    const input = document.getElementById('pw-input');
+    const btn = document.getElementById('pw-btn');
+    const error = document.getElementById('pw-error');
+    function unlockPage() {
+      overlay.style.opacity = 0;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.body.classList.remove('locked');
+        document.body.style.overflow = '';
+      }, 380);
+      sessionStorage.setItem('auav_pw_ok', 'yes');
+      error.textContent = '';
+    }
+    // If already validated this session, hide overlay
+    if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
+      unlockPage();
+    }
+    function tryPassword() {
+      if (input.value === PASSWORD) {
+        unlockPage();
+      } else {
+        error.textContent = 'Incorrect password.';
+        input.value = '';
+        input.focus();
       }
-      // Add more streams like:
-      // , "stream2": { title: "Another Stream", youtubeId: "..." }
+    }
+    btn.onclick = tryPassword;
+    input.onkeydown = function(e) {
+      if (e.key === "Enter") tryPassword();
     };
-    function loadArchive(id) {
-      document.getElementById('archive-title').textContent = streams[id].title;
-      document.getElementById('archive-video').src =
-        `https://www.youtube.com/embed/${streams[id].youtubeId}`;
-      let links = document.querySelectorAll('.stream-link');
-      links.forEach(l => l.classList.remove('selected'));
-      links.forEach(l => { if (l.textContent === streams[id].title) l.classList.add('selected'); });
+    setTimeout(() => { input.focus(); }, 200);
+
+    // OvenPlayer and comms logic
+    const commsPlayer = OvenPlayer.create("comms", {
+      sources: [{
+        type: "webrtc",
+        file: "wss://your-server/live/comms"
+      }],
+      autoStart: true,
+      mute: false,
+      controls: false,
+      width: "0",
+      height: "0"
+    });
+    function toggleComms() {
+      commsPlayer.setMute(!commsPlayer.getMute());
+    }
+    let micStream;
+    function handleMicToggle(enabled) {
+      if (enabled) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+          micStream = stream;
+          // Connect micStream to server here
+        }).catch(err => {
+          alert("Mic access denied or unavailable.");
+        });
+      } else {
+        if (micStream) {
+          micStream.getTracks().forEach(track => track.stop());
+          micStream = null;
+        }
+      }
     }
   </script>
 </body>
