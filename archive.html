@@ -64,7 +64,7 @@
       padding-top: 8px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       position: relative;
       z-index: 2;
     }
@@ -76,8 +76,7 @@
       margin-top: 0;
       letter-spacing: 0.01em;
       width: 100%;
-      text-align: left;
-      padding-left: 16px;
+      text-align: center;
       box-sizing: border-box;
     }
     .sidebar-separator {
@@ -91,26 +90,29 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       z-index: 3;
       position: relative;
     }
     .stream-link {
       background: #fff;
       margin-bottom: 0;
-      padding: 13px 15px 13px 16px;
+      padding: 13px 0;
       border-radius: 0;
       color: var(--auav-orange);
       font-weight: 600;
       cursor: pointer;
       width: 100%;
-      text-align: left;
+      text-align: center;
       border: none;
       text-decoration: none;
       font-size: 1.06rem;
       transition: background .14s, color .14s;
       border-bottom: 1px solid #f2f2f2;
       box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .stream-link.selected, .stream-link:hover {
       background: var(--auav-orange);
@@ -127,20 +129,14 @@
       padding: 30px 0 0 0;
       min-width: 0;
     }
-    .archive-logo {
-      margin-bottom: 18px;
-      margin-top: 18px;
-    }
-    .archive-logo img {
-      max-width: 190px;
-      height: auto;
-    }
     .archive-title {
       font-size: 1.38rem;
       color: var(--auav-grey);
       font-weight: 700;
       margin-bottom: 18px;
       letter-spacing: 0.01em;
+      margin-top: 32px;
+      text-align: center;
     }
     .archive-video-box {
       width: 92%;
@@ -160,9 +156,8 @@
       .sidebar h2 { margin-bottom: 0; margin-right: 20px;}
       .sidebar-separator { width: 100vw; left: 0;}
       .sidebar-streams { flex-direction: row; width: 100vw; margin-top: 0;}
-      .stream-link { width: auto; min-width: 90px; font-size: 1.08rem; padding: 9px 13px 9px 13px;}
+      .stream-link { width: auto; min-width: 90px; font-size: 1.08rem; padding: 9px 13px;}
       .archive-viewer { padding: 15px 0 0 0;}
-      .archive-logo img { max-width: 110px; }
       .archive-video-box video { height: 46vw; }
     }
   </style>
@@ -187,12 +182,9 @@
       </div>
     </div>
     <div class="archive-viewer">
-      <div class="archive-logo">
-        <img src="AUAV_INLINE.png" alt="AUAV Logo">
-      </div>
       <div class="archive-title" id="archive-title">Archived Stream Test</div>
       <div class="archive-video-box" id="archive-video-box">
-        <video controls poster="Untitled design (2).png">
+        <video controls>
           <source id="video-source" src="https://drive.google.com/uc?export=download&id=1x3Nqyx5X0z7u0JRLy5ZlrI8IC3B0kM6y" type="video/mp4">
           Your browser does not support the video tag.
         </video>
