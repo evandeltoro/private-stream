@@ -84,11 +84,15 @@
       text-align: center;
     }
     .sidebar-separator {
-      width: 75%;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 54px; /* Adjust if needed depending on .sidebar h2 margins/padding */
       height: 3px;
       background: var(--auav-orange);
-      border-radius: 2px;
-      margin: 0 0 16px 0;
+      margin: 0;
+      border-radius: 0;
+      z-index: 2;
     }
     .stream-link {
       background: #f4f4f4;
@@ -154,7 +158,6 @@
     .archive-video-box video {
       width: 100%; height: 410px; background: #222; display: block; border-radius: 7px;
     }
-    /* Sticky footer always at very bottom */
     .sticky-footer {
       position: fixed;
       left: 0;
@@ -176,7 +179,7 @@
       .archived-main { flex-direction: column; height: auto; }
       .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: 2px solid var(--auav-orange); padding: 12px 0; height: auto;}
       .sidebar h2 { margin-bottom: 0; margin-right: 20px;}
-      .sidebar-separator { width: 22vw; min-width: 60px; }
+      .sidebar-separator { width: 22vw; min-width: 60px; position: static; margin: 0 0 16px 0;}
       .stream-link { margin-bottom: 0; margin-right: 8px;}
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
