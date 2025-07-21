@@ -11,7 +11,6 @@
       --auav-grey: #4a4a4a;
       --sidebar-width: 190px;
       --footer-height: 40px;
-      --footer-logos-height: 65px;
     }
     html, body {
       margin: 0;
@@ -148,29 +147,6 @@
     .archive-video-box video {
       width: 100%; height: 410px; background: #222; display: block; border-radius: 7px;
     }
-    /* Centered footer logos now full width, no left/right margin or white space */
-    .footer-logos {
-      width: 100vw;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      height: var(--footer-logos-height);
-      margin-bottom: 0;
-      margin-top: 0;
-      position: absolute;
-      left: 0; right: 0;
-      bottom: var(--footer-height);
-      background: transparent;
-      z-index: 2;
-      pointer-events: none; /* allows sidebar clicks over logo */
-    }
-    .footer-logos img {
-      width: 480px; /* Use a fixed width so it stretches edge to edge */
-      max-width: 100vw;
-      height: auto;
-      margin: 0;
-      display: block;
-    }
     /* Sticky footer always at very bottom */
     .sticky-footer {
       position: fixed;
@@ -197,8 +173,6 @@
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
       .archive-video-box video { height: 46vw; }
-      .footer-logos img { width: 98vw !important; }
-      .footer-logos { height: 12vw !important;}
       .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0; height: 8vw;}
     }
   </style>
@@ -230,10 +204,6 @@
           Your browser does not support the video tag.
         </video>
       </div>
-    </div>
-    <!-- Full width footer logos are now here, overlaying bottom of page -->
-    <div class="footer-logos">
-      <img src="Untitled design (2).png" alt="Group Logos">
     </div>
   </div>
   <div class="sticky-footer">
