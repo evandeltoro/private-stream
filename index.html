@@ -21,26 +21,67 @@
       box-sizing: border-box;
     }
     body {
+      min-height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
+    }
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-bottom: 2.5px solid var(--auav-orange);
+      padding: 0 24px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 10;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-logo img { height: 30px; }
+    .nav-logo span {
+      font-weight: 700;
+      font-size: 1.28rem;
+      color: var(--auav-grey);
+      letter-spacing: 0.01em;
+    }
+    .nav-menu { display: flex; gap: 24px;}
+    .nav-item {
+      color: var(--auav-grey); font-weight: 600; font-size: 1.07rem;
+      text-decoration: none; padding: 4px 12px; border-radius: 7px;
+      transition: background .17s;
+    }
+    .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
+
+    /* Main grid layout below navbar */
+    .main-grid {
       display: grid;
       grid-template-columns: 20px 1fr 20px;
-      grid-template-rows: 40px auto 1fr auto auto;
+      grid-template-rows: auto auto 1fr auto auto;
       grid-template-areas:
-        "top top top"
         "left main right"
         "left stream right"
         "left comms right"
         "left footer right";
+      height: calc(100vh - 48px);
+      min-height: calc(100vh - 48px);
+      max-height: calc(100vh - 48px);
       overflow: hidden;
-      height: 100vh;
-      min-height: 100vh;
-      max-height: 100vh;
     }
-    .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
-    .side-bar-left, .side-bar-right { grid-area: left; background-color: var(--auav-orange);}
+    .side-bar-left, .side-bar-right { background-color: var(--auav-orange); }
+    .side-bar-left { grid-column: 1; grid-row: 1 / span 5; }
+    .side-bar-right { grid-column: 3; grid-row: 1 / span 5; }
+
     @media (min-width: 701px) {
       .side-bar-left, .side-bar-right {
         position: fixed;
-        top: 0;
+        top: 48px;
         bottom: 0;
         width: 20px;
         z-index: 1;
@@ -51,14 +92,16 @@
     }
     @media (max-width: 700px) {
       .side-bar-left, .side-bar-right { display: none; }
+      .main-grid { grid-template-columns: 0 1fr 0; }
     }
-    .main-content { grid-area: main; text-align: center; padding: 6px 0 0;}
+
+    .main-content { grid-column: 2; grid-row: 1; text-align: center; padding: 16px 0 0;}
     .logo { max-width: 200px; height: auto;}
     h1 { font-size: 1.25rem; margin: 7px 0 10px;}
-    .video-wrapper { grid-area: stream; display: flex; justify-content: center; align-items: center; padding: 0 6px;}
+    .video-wrapper { grid-column: 2; grid-row: 2; display: flex; justify-content: center; align-items: center; padding: 0 6px;}
     .video-box { position: relative; width: 100%; max-width: 650px; aspect-ratio: 16 / 9; background: #000; border: 2px solid #000; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
     iframe { position: absolute; width: 100%; height: 100%; border: none; border-radius: 6px;}
-    .comms-controls { grid-area: comms; display: flex; flex-direction: column; align-items: center; padding: 7px;}
+    .comms-controls { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; align-items: center; padding: 7px;}
     .comms-controls h3 { font-size: 1.08rem; margin-bottom: 8px;}
     .switch-container { display: flex; gap: 22px; margin-top: 3px; align-items: center;}
     .switch-group { display: flex; flex-direction: column; align-items: center; font-weight: bold; font-size: 0.97rem;}
@@ -70,7 +113,7 @@
     input:checked + .slider:before { transform: translateX(24px);}
     .slider::after { content: "OFF"; color: white; font-size: 10px; font-weight: bold; position: absolute; top: 5px; right: 8px; transition: .4s;}
     input:checked + .slider::after { content: "ON"; left: 8px; right: auto;}
-    .footer-logos { grid-area: footer; display: flex; justify-content: center; align-items: flex-end; min-height: 55px;}
+    .footer-logos { grid-column: 2; grid-row: 4; display: flex; justify-content: center; align-items: flex-end; min-height: 55px;}
     .footer-logos img { max-width: 250px; height: auto; margin-top: 0; margin-bottom: 3px;}
     .sticky-footer {
       position: fixed;
@@ -88,6 +131,7 @@
       font-weight: 600;
       width: 100vw;
     }
+
     /* Password Overlay: FULLSCREEN, BLUR & LOCKOUT */
     #password-overlay {
       position: fixed;
@@ -177,7 +221,7 @@
         max-height: 100vh !important;
         overflow: hidden !important;
       }
-      body {
+      .main-grid {
         grid-template-columns: 0 1fr 0;
         grid-template-rows:
           11vw
@@ -188,9 +232,9 @@
           14vw
           48vw
           8vw;
-        height: 100vh !important;
-        min-height: 100vh !important;
-        max-height: 100vh !important;
+        height: calc(100vh - 48px) !important;
+        min-height: calc(100vh - 48px) !important;
+        max-height: calc(100vh - 48px) !important;
       }
       .side-bar-left, .side-bar-right { display: none; }
       .main-content {
@@ -226,45 +270,55 @@
       <div id="pw-error"></div>
     </div>
   </div>
-  <div class="top-bar"></div>
-  <div class="side-bar-left"></div>
-  <div class="side-bar-right"></div>
-  <div class="main-content">
-    <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo">
-    <h1>Private Livestream</h1>
-  </div>
-  <div style="grid-row: 3;"></div>
-  <div class="video-wrapper" style="grid-row: 4;">
-    <div class="video-box">
-      <iframe
-        src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar-apl.netlify.app"
-        allowfullscreen
-        loading="lazy">
-      </iframe>
+  <!-- NAVBAR - always present, blurred when locked -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo">
+      <span>AUAV</span>
     </div>
-  </div>
-  <div style="grid-row: 5;"></div>
-  <div class="comms-controls" style="grid-row: 6;">
-    <h3>Communication Controls</h3>
-    <div class="switch-container">
-      <div class="switch-group">
-        <label class="toggle-ios">
-          <input type="checkbox" checked onchange="toggleComms()">
-          <span class="slider"></span>
-        </label>
-        <span>Audio</span>
-      </div>
-      <div class="switch-group">
-        <label class="toggle-ios">
-          <input type="checkbox" onchange="handleMicToggle(this.checked)">
-          <span class="slider"></span>
-        </label>
-        <span>Mic</span>
+    <div class="nav-menu">
+      <a href="index.html" class="nav-item active">Home</a>
+      <a href="archive.html" class="nav-item">Archived Streams</a>
+    </div>
+  </nav>
+  <div class="main-grid">
+    <div class="side-bar-left"></div>
+    <div class="side-bar-right"></div>
+    <div class="main-content">
+      <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo">
+      <h1>Private Livestream</h1>
+    </div>
+    <div class="video-wrapper">
+      <div class="video-box">
+        <iframe
+          src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar-apl.netlify.app"
+          allowfullscreen
+          loading="lazy">
+        </iframe>
       </div>
     </div>
-  </div>
-  <div class="footer-logos" style="grid-row: 7;">
-    <img src="Untitled design (2).png" alt="Group Logos">
+    <div class="comms-controls">
+      <h3>Communication Controls</h3>
+      <div class="switch-container">
+        <div class="switch-group">
+          <label class="toggle-ios">
+            <input type="checkbox" checked onchange="toggleComms()">
+            <span class="slider"></span>
+          </label>
+          <span>Audio</span>
+        </div>
+        <div class="switch-group">
+          <label class="toggle-ios">
+            <input type="checkbox" onchange="handleMicToggle(this.checked)">
+            <span class="slider"></span>
+          </label>
+          <span>Mic</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-logos">
+      <img src="Untitled design (2).png" alt="Group Logos">
+    </div>
   </div>
   <div class="sticky-footer">
     © 2025 AUAV — Test Stream Environment
