@@ -20,54 +20,6 @@
       color: var(--auav-grey);
       box-sizing: border-box;
     }
-    /* NAVBAR STYLES */
-    .nav-bar {
-      width: 100vw;
-      position: fixed;
-      top: 0; left: 0; z-index: 99999;
-      height: 44px;
-      background: #fff;
-      border-bottom: 2.5px solid var(--auav-orange);
-      display: flex;
-      align-items: center;
-      padding: 0 32px 0 0;
-    }
-    .nav-logo {
-      height: 40px;
-      display: flex;
-      align-items: center;
-      margin-left: 18px;
-    }
-    .nav-logo img {
-      height: 32px;
-      margin-right: 9px;
-    }
-    .nav-links {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-    .nav-link {
-      font-size: 1.07rem;
-      color: var(--auav-grey);
-      font-weight: 600;
-      background: none;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background .15s, color .15s;
-      cursor: pointer;
-    }
-    .nav-link:hover, .nav-link.active {
-      background: var(--auav-orange);
-      color: #fff;
-    }
-    /* Push main grid down to make room for navbar */
-    body { padding-top: 44px !important; }
-
-    /* ORIGINAL GRID STYLES FOLLOW... */
     body {
       display: grid;
       grid-template-columns: 20px 1fr 20px;
@@ -84,10 +36,7 @@
       max-height: 100vh;
     }
     .top-bar { grid-area: top; background-color: var(--auav-orange); height: 40px;}
-    .side-bar-left, .side-bar-right { 
-      grid-area: left; 
-      background-color: var(--auav-orange);
-    }
+    .side-bar-left, .side-bar-right { grid-area: left; background-color: var(--auav-orange);}
     @media (min-width: 701px) {
       .side-bar-left, .side-bar-right {
         position: fixed;
@@ -139,16 +88,27 @@
       font-weight: 600;
       width: 100vw;
     }
+    /* Password Overlay: FULLSCREEN, BLUR & LOCKOUT */
     #password-overlay {
       position: fixed;
-      z-index: 9999;
+      z-index: 99999;
       inset: 0;
-      background: rgba(250, 250, 250, 0.97);
+      width: 100vw;
+      height: 100vh;
+      background: rgba(250, 250, 250, 0.93);
+      backdrop-filter: blur(10px) brightness(0.97);
+      -webkit-backdrop-filter: blur(10px) brightness(0.97);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      transition: opacity 0.4s;
+      pointer-events: all;
+    }
+    body.locked > *:not(#password-overlay) {
+      filter: blur(8px) brightness(0.85);
+      pointer-events: none !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
     }
     #pw-box {
       background: #fff;
@@ -160,6 +120,7 @@
       align-items: center;
       min-width: 220px;
       border-top: 8px solid var(--auav-orange);
+      z-index: 999999;
     }
     #pw-box img {
       width: 90px;
@@ -231,23 +192,30 @@
         min-height: 100vh !important;
         max-height: 100vh !important;
       }
-      .nav-bar { position: static; border-bottom: none; height: 40px; padding: 0 7px 0 0;}
-      .nav-logo img { height: 26px; }
-      .footer-logos img { max-width: 36vw !important;}
+      .side-bar-left, .side-bar-right { display: none; }
+      .main-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 0 !important;
+        height: auto !important;
+      }
+      .logo { max-width: 24vw; margin-top: 0.7vw; margin-bottom: 1vw; }
+      h1 { font-size: 5vw; margin: 0.7vw 0 0 0 !important;}
+      .video-wrapper { padding: 0; }
+      .video-box { max-width: 98vw; aspect-ratio: 16 / 9 !important; min-height: 0;}
+      .comms-controls { margin-top: 0vw !important; margin-bottom: 0vw !important; padding: 0 !important; }
+      .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
+      .switch-group { font-size: 3vw;}
+      .switch-container { gap: 5vw; margin-top: 1vw; }
+      .toggle-ios { width: 13vw; height: 5vw;}
+      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
+      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 0vw;}
+      .footer-logos img { max-width: 36vw !important; margin-top: 0; margin-bottom: 0vw;}
+      .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
     }
   </style>
 </head>
-<body>
-  <!-- NAVBAR DROPDOWN -->
-  <div class="nav-bar">
-    <div class="nav-logo">
-      <img src="AUAV_INLINE.png" alt="AUAV Logo"><span style="font-weight:700; font-size:1.16rem; color:var(--auav-grey);letter-spacing:0.02em;">AUAV</span>
-    </div>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link active">Home</a>
-      <a href="archive.html" class="nav-link">Archived Streams</a>
-    </div>
-  </div>
+<body class="locked">
   <!-- Password Overlay -->
   <div id="password-overlay">
     <div id="pw-box">
@@ -309,20 +277,23 @@
     const input = document.getElementById('pw-input');
     const btn = document.getElementById('pw-btn');
     const error = document.getElementById('pw-error');
+    function unlockPage() {
+      overlay.style.opacity = 0;
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        document.body.classList.remove('locked');
+        document.body.style.overflow = '';
+      }, 380);
+      sessionStorage.setItem('auav_pw_ok', 'yes');
+      error.textContent = '';
+    }
     // If already validated this session, hide overlay
     if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
-      overlay.style.display = 'none';
-      document.body.style.overflow = '';
+      unlockPage();
     }
     function tryPassword() {
       if (input.value === PASSWORD) {
-        overlay.style.opacity = 0;
-        setTimeout(() => {
-          overlay.style.display = 'none';
-          document.body.style.overflow = '';
-        }, 380);
-        sessionStorage.setItem('auav_pw_ok', 'yes');
-        error.textContent = '';
+        unlockPage();
       } else {
         error.textContent = 'Incorrect password.';
         input.value = '';
