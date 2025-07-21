@@ -78,10 +78,17 @@
       font-size: 1.07rem;
       font-weight: 600;
       color: var(--auav-orange);
-      margin-bottom: 18px;
+      margin-bottom: 12px;
       letter-spacing: 0.02em;
       width: 100%;
       text-align: center;
+    }
+    .sidebar-separator {
+      width: 75%;
+      height: 3px;
+      background: var(--auav-orange);
+      border-radius: 2px;
+      margin: 0 0 16px 0;
     }
     .stream-link {
       background: #f4f4f4;
@@ -169,6 +176,7 @@
       .archived-main { flex-direction: column; height: auto; }
       .sidebar { flex-direction: row; width: 100vw; border-right: none; border-bottom: 2px solid var(--auav-orange); padding: 12px 0; height: auto;}
       .sidebar h2 { margin-bottom: 0; margin-right: 20px;}
+      .sidebar-separator { width: 22vw; min-width: 60px; }
       .stream-link { margin-bottom: 0; margin-right: 8px;}
       .archive-viewer { padding: 15px 0 0 0;}
       .archive-logo img { max-width: 110px; }
@@ -190,6 +198,7 @@
   <div class="archived-main">
     <div class="sidebar">
       <h2>Archived Streams</h2>
+      <div class="sidebar-separator"></div>
       <a href="#" class="stream-link selected" id="archivestream-test" onclick="loadArchive('test'); return false;">Archived Stream Test</a>
       <!-- Add more streams here as you upload more -->
     </div>
