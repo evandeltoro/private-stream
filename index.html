@@ -15,10 +15,14 @@
       margin: 0;
       padding: 0;
       height: 100vh;
+      width: 100vw;
       font-family: 'Inter', sans-serif;
       background: #fafafa;
       color: var(--auav-grey);
       box-sizing: border-box;
+      overflow: hidden;
+      /* prevents scroll everywhere */
+      position: fixed;
     }
     body {
       min-height: 100vh;
@@ -31,7 +35,7 @@
       height: 48px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       background: #fff;
       border-bottom: 2.5px solid var(--auav-orange);
       padding: 0 24px;
@@ -43,15 +47,36 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-right: auto;
     }
     .nav-logo img { height: 30px; }
-    .nav-menu { display: flex; gap: 24px;}
+    .nav-menu { display: flex; gap: 12px;}
     .nav-item {
       color: var(--auav-grey); font-weight: 600; font-size: 1.07rem;
       text-decoration: none; padding: 4px 12px; border-radius: 7px;
       transition: background .17s;
     }
     .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
+
+    /* Move nav-menu buttons closer together on mobile, align right */
+    @media (max-width: 700px) {
+      .navbar {
+        justify-content: flex-end;
+        padding: 0 10px;
+      }
+      .nav-logo {
+        display: none; /* Hide AUAV logo on mobile for more space */
+      }
+      .nav-menu {
+        gap: 0;
+      }
+      .nav-item {
+        font-size: 1.05rem;
+        padding: 4px 10px;
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
 
     /* Main grid layout below navbar */
     .main-grid {
@@ -86,9 +111,22 @@
     }
     @media (max-width: 700px) {
       .side-bar-left, .side-bar-right { display: none; }
-      .main-grid { grid-template-columns: 0 1fr 0; }
+      .main-grid {
+        grid-template-columns: 0 1fr 0;
+        grid-template-rows: min-content min-content 1fr min-content min-content;
+        height: calc(100vh - 48px) !important;
+        min-height: calc(100vh - 48px) !important;
+        max-height: calc(100vh - 48px) !important;
+        overflow: hidden !important;
+      }
+      html, body {
+        height: 100vh !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+        overflow: hidden !important;
+        position: fixed;
+      }
     }
-
     .main-content { grid-column: 2; grid-row: 1; text-align: center; padding: 16px 0 0;}
     .logo { max-width: 200px; height: auto;}
     h1 { font-size: 1.25rem; margin: 7px 0 10px;}
@@ -207,71 +245,20 @@
       min-height: 18px;
       margin-top: 2px;
     }
-
-    /* --- MOBILE OVERRIDES --- */
     @media (max-width: 700px) {
-      html, body {
-        height: 100vh !important;
-        min-height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
-      }
-      .main-grid {
-        display: block;
-        height: auto !important;
-        min-height: 0 !important;
-        max-height: none !important;
-        width: 100vw;
-      }
-      .main-content {
-        padding: 10vw 0 0 0 !important;
-        margin: 0 !important;
-        text-align: center;
-      }
-      .logo { max-width: 30vw; margin-top: 0.7vw; margin-bottom: 1vw; }
+      .logo { max-width: 26vw; margin-top: 0.7vw; margin-bottom: 1vw; }
       h1 { font-size: 5vw; margin: 0.7vw 0 0 0 !important;}
-      .video-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0 2vw;
-        margin: 0 auto;
-        width: 100vw;
-        box-sizing: border-box;
-      }
-      .video-box {
-        position: relative;
-        width: 100vw;
-        max-width: 100vw;
-        aspect-ratio: 16 / 9;
-        min-height: 0;
-        border-radius: 0;
-        border: none;
-        box-shadow: none;
-      }
-      iframe {
-        position: static;
-        width: 100vw !important;
-        max-width: 100vw !important;
-        height: 56vw !important; /* 16:9 aspect ratio */
-        border-radius: 0 !important;
-        background: #222;
-        margin: 0 auto;
-        display: block;
-      }
-      .comms-controls {
-        margin-top: 2vw !important;
-        margin-bottom: 2vw !important;
-        padding: 0 !important;
-      }
+      .video-wrapper { padding: 0; }
+      .video-box { max-width: 98vw; aspect-ratio: 16 / 9 !important; min-height: 0;}
+      .comms-controls { margin-top: 0vw !important; margin-bottom: 0vw !important; padding: 0 !important; }
       .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
       .switch-group { font-size: 3vw;}
       .switch-container { gap: 5vw; margin-top: 1vw; }
       .toggle-ios { width: 13vw; height: 5vw;}
       .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
-      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 2vw; }
+      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 0vw;}
       .footer-logos img { max-width: 36vw !important; margin-top: 0; margin-bottom: 0vw;}
-      .sticky-footer { font-size: 2.9vw; padding: 2vw 0 1.4vw 0;}
+      .sticky-footer { font-size: 2.4vw; padding: 2vw 0 1.4vw 0;}
     }
   </style>
 </head>
