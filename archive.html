@@ -27,7 +27,6 @@
       height: 100vh;
       overflow: hidden;
     }
-    /* NAVBAR */
     .navbar {
       width: 100%;
       height: 48px;
@@ -41,6 +40,11 @@
       position: relative;
       z-index: 10;
     }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .nav-logo img { height: 30px; }
     .nav-menu { display: flex; gap: 24px;}
     .nav-item {
@@ -49,9 +53,6 @@
       transition: background .17s;
     }
     .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
-    .mobile-menu-arrow {
-      display: none;
-    }
     .archived-main {
       display: flex;
       flex: 1;
@@ -68,7 +69,7 @@
       align-items: center;
       position: relative;
       z-index: 2;
-      transition: left 0.22s cubic-bezier(.77,0,.18,1);
+      transition: none;
     }
     .sidebar-title {
       font-size: 1.17rem;
@@ -132,7 +133,7 @@
     .archive-video-box {
       width: 92%;
       max-width: 850px;
-      border-radius: 16px;
+      border-radius: 18px;
       background: #eaeaea;
       box-shadow: 0 4px 14px rgba(0,0,0,0.11);
       overflow: hidden;
@@ -144,103 +145,127 @@
     }
     .archive-video-box iframe {
       width: 100%;
-      height: 260px;
+      height: 210px;
       border: none;
       display: block;
       background: #222;
     }
-
-    /* ----- MOBILE STYLES ONLY ----- */
+    /* ----------- MOBILE ----------- */
     @media (max-width: 700px) {
-      body, html {
+      html, body {
         overflow: hidden !important;
-        max-height: 100vh;
-        height: 100vh;
+        min-height: 100vh !important;
+        height: 100vh !important;
+      }
+      .navbar {
+        padding: 0 1vw 0 0vw;
+      }
+      .nav-logo {
+        margin-left: 2vw;
+        gap: 7px;
       }
       .archived-main {
         flex-direction: column;
+        height: calc(100vh - 48px);
         width: 100vw;
-        height: auto;
       }
-      .navbar {
-        padding-left: 10vw;
-        padding-right: 3vw;
-        height: 50px;
-        min-height: 50px;
-        max-height: 50px;
-      }
-      .nav-menu {
-        gap: 2vw;
-      }
-      .mobile-menu-arrow {
+      /* Show/hide menu triggers */
+      #mobile-menu-arrow {
         display: block;
         position: absolute;
-        top: 52px; /* below orange navbar border */
-        left: 8px;
-        z-index: 20;
+        left: 3vw;
+        top: 58px; /* below orange line */
+        z-index: 11;
+        width: 44px;
+        height: 44px;
         background: #fff;
-        border: 2.5px solid var(--auav-orange);
-        border-radius: 14px;
-        width: 38px;
-        height: 38px;
+        border: 3px solid var(--auav-orange);
+        border-radius: 13px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 2px 8px 0 rgba(0,0,0,0.09);
       }
       .sidebar {
+        display: none;
         position: fixed;
-        left: -100vw;
-        top: 50px;
-        height: calc(100vh - 50px);
-        width: 88vw;
-        max-width: 410px;
-        transition: left 0.24s cubic-bezier(.77,0,.18,1);
+        left: 0;
+        top: 48px;
+        height: 100vh;
+        width: 79vw;
+        max-width: 330px;
+        min-width: 220px;
+        background: #fff;
         border-right: 2.5px solid var(--auav-orange);
+        box-shadow: 2px 0 22px 0 rgba(243,112,33,0.09);
+        padding-top: 18px;
         z-index: 99;
-        padding-top: 24px !important;
+        transition: transform 0.22s;
       }
       .sidebar.open {
-        left: 0;
-        box-shadow: 0 0 32px 0 rgba(0,0,0,0.08);
+        display: block;
+        animation: slideIn .18s;
+      }
+      @keyframes slideIn {
+        from { transform: translateX(-35vw); opacity: 0.1;}
+        to   { transform: translateX(0); opacity: 1;}
+      }
+      /* Add close arrow in top right of sidebar */
+      #close-menu-arrow {
+        position: absolute;
+        top: 11px;
+        right: 10px;
+        width: 39px;
+        height: 39px;
+        background: #fff;
+        border: 2.5px solid var(--auav-orange);
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.04);
       }
       .sidebar-title {
-        margin-bottom: 18px !important; /* Give more space so highlight bubble doesn't touch divider */
-        text-align: center;
-        font-size: 1.17rem;
+        font-size: 1.18rem;
+        margin-top: 32px;
+        margin-bottom: 4px;
       }
       .sidebar-divider {
-        margin-bottom: 20px !important;
+        margin-bottom: 19px;
       }
       .stream-link {
         margin-bottom: 14px;
-        margin-top: 0;
-        font-size: 1.15rem;
+        width: 92%;
+        font-size: 1.08rem;
+        padding: 13px 5px;
       }
       .archive-viewer {
-        padding-top: 16vw;
+        width: 100vw;
+        min-width: 0;
+        padding: 8vw 0 0 0;
         align-items: center;
         justify-content: flex-start;
-        width: 100vw;
-        min-height: 0;
       }
       .archive-title {
-        margin-top: 3vw;
-        margin-bottom: 5vw;
-        font-size: 5vw;
+        font-size: 6vw;
+        margin: 5vw 0 6vw 0;
       }
       .archive-video-box {
-        width: 97vw;
-        max-width: 97vw;
-        border-radius: 18px;
-        margin: 0 auto 3vw auto;
-        min-height: 32vw;
-        box-shadow: 0 3px 14px 0 rgba(0,0,0,0.08);
+        width: 96vw;
+        min-width: 0;
+        min-height: 45vw;
+        max-width: 98vw;
+        border-radius: 20px;
+        margin: 0 auto 5vw auto;
+        padding: 0;
       }
       .archive-video-box iframe {
-        width: 100vw !important;
-        height: 46vw !important;
+        width: 100vw;
+        height: 56vw; /* 16:9 ratio */
+        min-width: 0;
         border-radius: 18px;
       }
     }
@@ -255,21 +280,21 @@
       <a href="index.html" class="nav-item">Home</a>
       <a href="archive.html" class="nav-item active">Archived Streams</a>
     </div>
-    <div class="mobile-menu-arrow" id="menuArrow" onclick="toggleSidebar()">
-      <!-- SVG Arrow Icon -->
-      <svg width="25" height="25" viewBox="0 0 18 18" fill="none">
-        <path d="M12 15L6 9L12 3" stroke="#f37021" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
   </nav>
   <div class="archived-main">
-    <div class="sidebar" id="sidebar">
+    <!-- Mobile menu arrow -->
+    <div id="mobile-menu-arrow" onclick="openMenu()" style="display:none">
+      <svg width="30" height="30" fill="none"><path d="M20 7L10 15L20 23" stroke="#f37021" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="sidebar" id="sidebar-menu">
+      <div id="close-menu-arrow" onclick="closeMenu()">
+        <svg width="24" height="24" fill="none"><path d="M7 12h10" stroke="#f37021" stroke-width="4" stroke-linecap="round"/><path d="M13 16l4-4-4-4" stroke="#f37021" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
       <span class="sidebar-title">Archived Streams</span>
       <div class="sidebar-divider"></div>
       <a href="#" class="stream-link selected" onclick="loadArchive('test'); return false;">Archived Stream Test</a>
-      <!-- Add more streams here as you upload more -->
     </div>
-    <div class="archive-viewer" id="archive-viewer">
+    <div class="archive-viewer">
       <div class="archive-title" id="archive-title">Archived Stream Test</div>
       <div class="archive-video-box" id="archive-video-box">
         <iframe
@@ -284,7 +309,24 @@
     </div>
   </div>
   <script>
-    // Stream data
+    // Only show mobile arrow/menu on mobile
+    function isMobile() {
+      return window.innerWidth <= 700;
+    }
+    function showMobileMenuArrow() {
+      document.getElementById('mobile-menu-arrow').style.display = isMobile() ? 'flex' : 'none';
+      document.getElementById('sidebar-menu').classList.remove('open');
+    }
+    function openMenu() {
+      document.getElementById('sidebar-menu').classList.add('open');
+    }
+    function closeMenu() {
+      document.getElementById('sidebar-menu').classList.remove('open');
+    }
+    window.addEventListener('resize', showMobileMenuArrow);
+    window.addEventListener('DOMContentLoaded', showMobileMenuArrow);
+
+    // Archive switching logic
     const streams = {
       "test": {
         title: "Archived Stream Test",
@@ -294,28 +336,12 @@
     function loadArchive(id) {
       document.getElementById('archive-title').textContent = streams[id].title;
       document.getElementById('archive-iframe').src = `https://www.youtube.com/embed/${streams[id].yt}`;
+      // Highlight selected
       let links = document.querySelectorAll('.stream-link');
       links.forEach(l => l.classList.remove('selected'));
       links.forEach(l => { if (l.textContent.trim() === streams[id].title) l.classList.add('selected'); });
-      if(window.innerWidth <= 700) closeSidebar();
+      closeMenu();
     }
-
-    // Mobile sidebar logic
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-    }
-    function closeSidebar() {
-      document.getElementById('sidebar').classList.remove('open');
-    }
-    // Close sidebar if user clicks outside (mobile only)
-    window.addEventListener('click', function(e){
-      if(window.innerWidth > 700) return;
-      const sidebar = document.getElementById('sidebar');
-      const arrow = document.getElementById('menuArrow');
-      if(sidebar.classList.contains('open') && !sidebar.contains(e.target) && !arrow.contains(e.target)) {
-        sidebar.classList.remove('open');
-      }
-    });
   </script>
 </body>
 </html>
