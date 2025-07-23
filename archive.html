@@ -78,7 +78,10 @@
       margin-bottom: 8px;
       text-align: center;
       width: 100%;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center; /* <-- horizontally center! */
+      min-height: 48px;
     }
     .sidebar-divider {
       width: 100%;
@@ -150,6 +153,73 @@
       background: #222;
     }
 
+    /* ----- DESKTOP STYLES ONLY ----- */
+    @media (min-width: 701px) {
+      .archived-main {
+        flex-direction: row;
+        height: calc(100vh - 48px);
+        min-height: 0;
+        width: 100vw;
+      }
+      .sidebar {
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+        max-width: 250px;
+        border-right: 2.5px solid var(--auav-orange);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 32px;
+        z-index: 2;
+        background: #fff;
+      }
+      .sidebar-title {
+        font-size: 1.17rem;
+        font-weight: 700;
+        color: #111;
+        letter-spacing: 0.01em;
+        margin-bottom: 8px;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center; /* <-- horizontally center! */
+        min-height: 48px;
+      }
+      .archive-viewer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        background: #fafafa;
+        padding: 30px 0 0 0;
+        min-width: 0;
+      }
+      .archive-video-box {
+        width: 95%;
+        max-width: 900px;
+        aspect-ratio: 16 / 9;
+        border-radius: 18px;
+        background: #eaeaea;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.11);
+        overflow: hidden;
+        margin-bottom: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 410px;
+        margin-top: 0;
+      }
+      .archive-video-box iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+        background: #222;
+      }
+    }
+
     /* ----- MOBILE STYLES ONLY ----- */
     @media (max-width: 700px) {
       body, html {
@@ -175,7 +245,7 @@
       .mobile-menu-arrow {
         display: block;
         position: absolute;
-        top: 52px; /* below orange navbar border */
+        top: 52px;
         left: 8px;
         z-index: 20;
         background: #fff;
@@ -206,7 +276,7 @@
         box-shadow: 0 0 32px 0 rgba(0,0,0,0.08);
       }
       .sidebar-title {
-        margin-bottom: 18px !important; /* Give more space so highlight bubble doesn't touch divider */
+        margin-bottom: 18px !important;
         text-align: center;
         font-size: 1.17rem;
       }
