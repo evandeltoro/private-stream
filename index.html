@@ -25,7 +25,69 @@
       max-height: 100vh;
       overflow: hidden;
     }
-    /* NAVBAR */
+    /* SPLASH SCREEN ANIMATION */
+    #splash-cover {
+      position: fixed;
+      z-index: 999999;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.8s cubic-bezier(.77,0,.18,1), opacity 0.5s;
+      will-change: transform, opacity;
+    }
+    #splash-logo {
+      width: 102px;
+      height: 102px;
+      opacity: 0;
+      transform: scale(0.2) rotate(-100deg);
+      animation: logoSpinIn 0.85s cubic-bezier(.7,-0.01,.37,1.36) 0.1s forwards,
+                 logoSpinOut 0.55s cubic-bezier(.82,-0.15,.19,1.29) 1.33s forwards;
+    }
+    @keyframes logoSpinIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.2) rotate(-100deg);
+      }
+      70% {
+        opacity: 1;
+        transform: scale(1.05) rotate(8deg);
+      }
+      85% {
+        opacity: 1;
+        transform: scale(0.96) rotate(-3deg);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1.00) rotate(0deg);
+      }
+    }
+    @keyframes logoSpinOut {
+      0% {
+        opacity: 1;
+        transform: scale(1.0) rotate(0deg);
+      }
+      70% {
+        opacity: 1;
+        transform: scale(0.82) rotate(-20deg);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.6) rotate(-90deg);
+      }
+    }
+    .splash-cover-hide {
+      /* Move splash cover up and fade out */
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 0.7s cubic-bezier(.77,0,.18,1), opacity 0.38s 0.25s;
+      pointer-events: none;
+    }
+
+    /* NAVBAR, PAGE, PW, ETC ... (YOUR STYLES UNCHANGED BELOW THIS) */
     .navbar {
       width: 100%;
       height: 48px;
@@ -121,7 +183,6 @@
       font-weight: 600;
       width: 100vw;
     }
-    /* Password Overlay: FULLSCREEN, BLUR & LOCKOUT */
     #password-overlay {
       position: fixed;
       z-index: 99999;
@@ -137,7 +198,7 @@
       flex-direction: column;
       pointer-events: all;
     }
-    body.locked > *:not(#password-overlay) {
+    body.locked > *:not(#password-overlay):not(#splash-cover) {
       filter: blur(8px) brightness(0.85);
       pointer-events: none !important;
       user-select: none !important;
@@ -155,33 +216,9 @@
       border-top: 8px solid var(--auav-orange);
       z-index: 999999;
     }
-    /* --- ANIMATED LOGO for PW PROMPT --- */
-    #pw-anim-logo {
+    #pw-box img {
       width: 90px;
       margin-bottom: 13px;
-      opacity: 0;
-      transform: rotate(-25deg) scale(0.7);
-      /* Start: rotated and smaller, invisible */
-      animation: logoEntrance 1.1s cubic-bezier(.42,1.63,.35,.98) 0.13s forwards;
-      /* cubic for bounce/overshoot, adjust as you want! */
-    }
-    @keyframes logoEntrance {
-      0% {
-        opacity: 0;
-        transform: rotate(-25deg) scale(0.7);
-      }
-      60% {
-        opacity: 1;
-        transform: rotate(10deg) scale(1.05);
-      }
-      85% {
-        opacity: 1;
-        transform: rotate(-2deg) scale(0.97);
-      }
-      100% {
-        opacity: 1;
-        transform: rotate(0deg) scale(1.0);
-      }
     }
     #pw-box h2 {
       margin: 0 0 14px 0;
@@ -262,18 +299,22 @@
   </style>
 </head>
 <body class="locked">
+  <!-- Splash Animation Overlay -->
+  <div id="splash-cover">
+    <img src="AUAV_INLINE.png" alt="AUAV Logo" id="splash-logo" />
+  </div>
+
   <!-- Password Overlay -->
   <div id="password-overlay">
     <div id="pw-box">
-      <!-- Animated AUAV logo above PW prompt -->
-      <img src="AUAV_INLINE.png" alt="AUAV Logo" id="pw-anim-logo" />
+      <img src="AUAV_INLINE.png" alt="AUAV Logo" />
       <h2>Enter Password to Access</h2>
       <input type="password" id="pw-input" placeholder="Password" autocomplete="off" />
       <button id="pw-btn">Enter</button>
       <div id="pw-error"></div>
     </div>
   </div>
-  <!-- NAVBAR -->
+  <!-- NAVBAR - always present, blurred when locked -->
   <nav class="navbar">
     <div class="nav-logo">
       <img src="AUAV_INLINE.png" alt="AUAV Logo">
@@ -327,6 +368,18 @@
   </div>
   <div id="comms"></div>
   <script>
+    // Splash Screen Animation: Hide splash after animation
+    window.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        document.getElementById("splash-cover").classList.add("splash-cover-hide");
+        // Remove splash from DOM after animation completes
+        setTimeout(() => {
+          const splash = document.getElementById("splash-cover");
+          if(splash) splash.parentNode.removeChild(splash);
+        }, 750); // should match the CSS slide transition time
+      }, 2000); // How long to show the splash (logo is in for ~0.85s, out for ~0.5s, so 2s is a nice experience)
+    });
+
     // Password overlay logic (remembers session)
     const PASSWORD = "Shell123";
     const overlay = document.getElementById('password-overlay');
