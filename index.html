@@ -40,25 +40,26 @@
       will-change: transform, opacity;
     }
     #splash-logo {
-      width: 102px;
-      height: 102px;
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
       opacity: 0;
-      transform: scale(0.2) rotate(-100deg);
-      animation: logoSpinIn 0.85s cubic-bezier(.7,-0.01,.37,1.36) 0.1s forwards,
+      transform: scale(0.7) rotate(-90deg);
+      animation: logoSpinIn 0.88s cubic-bezier(.7,-0.01,.37,1.36) 0.1s forwards,
                  logoSpinOut 0.55s cubic-bezier(.82,-0.15,.19,1.29) 1.33s forwards;
     }
     @keyframes logoSpinIn {
       0% {
         opacity: 0;
-        transform: scale(0.2) rotate(-100deg);
+        transform: scale(0.7) rotate(-90deg);
       }
       70% {
         opacity: 1;
-        transform: scale(1.05) rotate(8deg);
+        transform: scale(1.08) rotate(12deg);
       }
       85% {
         opacity: 1;
-        transform: scale(0.96) rotate(-3deg);
+        transform: scale(0.97) rotate(-5deg);
       }
       100% {
         opacity: 1;
@@ -72,21 +73,20 @@
       }
       70% {
         opacity: 1;
-        transform: scale(0.82) rotate(-20deg);
+        transform: scale(0.85) rotate(-15deg);
       }
       100% {
         opacity: 0;
-        transform: scale(0.6) rotate(-90deg);
+        transform: scale(0.7) rotate(-90deg);
       }
     }
     .splash-cover-hide {
-      /* Move splash cover up and fade out */
       transform: translateY(-100%);
       opacity: 0;
       transition: transform 0.7s cubic-bezier(.77,0,.18,1), opacity 0.38s 0.25s;
       pointer-events: none;
     }
-
+    /* ...rest of your CSS unchanged... */
     /* NAVBAR, PAGE, PW, ETC ... (YOUR STYLES UNCHANGED BELOW THIS) */
     .navbar {
       width: 100%;
@@ -359,93 +359,4 @@
         </div>
       </div>
     </div>
-    <div class="footer-logos">
-      <img src="Untitled design (2).png" alt="Group Logos">
-    </div>
-  </div>
-  <div class="sticky-footer">
-    © 2025 AUAV — Test Stream Environment
-  </div>
-  <div id="comms"></div>
-  <script>
-    // Splash Screen Animation: Hide splash after animation
-    window.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        document.getElementById("splash-cover").classList.add("splash-cover-hide");
-        // Remove splash from DOM after animation completes
-        setTimeout(() => {
-          const splash = document.getElementById("splash-cover");
-          if(splash) splash.parentNode.removeChild(splash);
-        }, 750); // should match the CSS slide transition time
-      }, 2000); // How long to show the splash (logo is in for ~0.85s, out for ~0.5s, so 2s is a nice experience)
-    });
-
-    // Password overlay logic (remembers session)
-    const PASSWORD = "Shell123";
-    const overlay = document.getElementById('password-overlay');
-    const input = document.getElementById('pw-input');
-    const btn = document.getElementById('pw-btn');
-    const error = document.getElementById('pw-error');
-    function unlockPage() {
-      overlay.style.opacity = 0;
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        document.body.classList.remove('locked');
-        document.body.style.overflow = '';
-      }, 380);
-      sessionStorage.setItem('auav_pw_ok', 'yes');
-      error.textContent = '';
-    }
-    // If already validated this session, hide overlay
-    if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
-      unlockPage();
-    }
-    function tryPassword() {
-      if (input.value === PASSWORD) {
-        unlockPage();
-      } else {
-        error.textContent = 'Incorrect password.';
-        input.value = '';
-        input.focus();
-      }
-    }
-    btn.onclick = tryPassword;
-    input.onkeydown = function(e) {
-      if (e.key === "Enter") tryPassword();
-    };
-    setTimeout(() => { input.focus(); }, 200);
-
-    // OvenPlayer and comms logic
-    const commsPlayer = OvenPlayer.create("comms", {
-      sources: [{
-        type: "webrtc",
-        file: "wss://your-server/live/comms"
-      }],
-      autoStart: true,
-      mute: false,
-      controls: false,
-      width: "0",
-      height: "0"
-    });
-    function toggleComms() {
-      commsPlayer.setMute(!commsPlayer.getMute());
-    }
-    let micStream;
-    function handleMicToggle(enabled) {
-      if (enabled) {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-          micStream = stream;
-          // Connect micStream to server here
-        }).catch(err => {
-          alert("Mic access denied or unavailable.");
-        });
-      } else {
-        if (micStream) {
-          micStream.getTracks().forEach(track => track.stop());
-          micStream = null;
-        }
-      }
-    }
-  </script>
-</body>
-</html>
+    <div
