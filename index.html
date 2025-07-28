@@ -299,10 +299,9 @@
 </head>
 <body class="locked">
   <!-- Splash Animation Overlay -->
-  <div id="splash-cover">
+  <div id="splash-cover" style="display:none;">
     <img src="AUAV_INLINE.png" alt="AUAV Logo" id="splash-logo" />
   </div>
-
   <!-- Password Overlay -->
   <div id="password-overlay">
     <div id="pw-box">
@@ -367,13 +366,20 @@
   </div>
   <div id="comms"></div>
   <script>
-    // Splash animation
-    setTimeout(function() {
-      document.getElementById('splash-cover').classList.add('splash-cover-hide');
-      setTimeout(() => {
-        document.getElementById('splash-cover').style.display = "none";
-      }, 850);
-    }, 1700);
+    // SPLASH LOGIC: Only show splash if sessionStorage doesn't have "auav_pw_ok"
+    function playSplashIfNeeded() {
+      if (sessionStorage.getItem('auav_pw_ok') !== 'yes') {
+        const splash = document.getElementById('splash-cover');
+        splash.style.display = 'flex';
+        setTimeout(() => {
+          splash.classList.add('splash-cover-hide');
+          setTimeout(() => {
+            splash.style.display = "none";
+          }, 850);
+        }, 1700);
+      }
+    }
+    playSplashIfNeeded();
 
     // Password overlay logic (remembers session)
     const PASSWORD = "Shell123";
