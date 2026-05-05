@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>AUAV Private Stream</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/ovenplayer/dist/ovenplayer.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --auav-orange: #f37021;
       --auav-grey: #4a4a4a;
     }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -19,26 +20,26 @@
       background: #fafafa;
       color: var(--auav-grey);
       box-sizing: border-box;
-    }
-    body {
-      min-height: 100vh;
-      max-height: 100vh;
       overflow: hidden;
     }
-    /* SPLASH SCREEN ANIMATION */
+
+    body.locked > *:not(#password-overlay):not(#splash-cover) {
+      filter: blur(8px) brightness(0.85);
+      pointer-events: none !important;
+      user-select: none !important;
+    }
+
     #splash-cover {
       position: fixed;
       z-index: 999999;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
       background: #fff;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       transition: transform 0.8s cubic-bezier(.77,0,.18,1), opacity 0.5s;
-      will-change: transform, opacity;
     }
+
     #splash-logo {
       width: 180px;
       height: 180px;
@@ -48,45 +49,26 @@
       animation: logoSpinIn 0.88s cubic-bezier(.7,-0.01,.37,1.36) 0.1s forwards,
                  logoSpinOut 0.55s cubic-bezier(.82,-0.15,.19,1.29) 1.33s forwards;
     }
+
     @keyframes logoSpinIn {
-      0% {
-        opacity: 0;
-        transform: scale(0.7) rotate(-90deg);
-      }
-      70% {
-        opacity: 1;
-        transform: scale(1.08) rotate(12deg);
-      }
-      85% {
-        opacity: 1;
-        transform: scale(0.97) rotate(-5deg);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1.00) rotate(0deg);
-      }
+      0% { opacity: 0; transform: scale(0.7) rotate(-90deg); }
+      70% { opacity: 1; transform: scale(1.08) rotate(12deg); }
+      85% { opacity: 1; transform: scale(0.97) rotate(-5deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
     }
+
     @keyframes logoSpinOut {
-      0% {
-        opacity: 1;
-        transform: scale(1.0) rotate(0deg);
-      }
-      70% {
-        opacity: 1;
-        transform: scale(0.85) rotate(-15deg);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.7) rotate(-90deg);
-      }
+      0% { opacity: 1; transform: scale(1) rotate(0deg); }
+      70% { opacity: 1; transform: scale(0.85) rotate(-15deg); }
+      100% { opacity: 0; transform: scale(0.7) rotate(-90deg); }
     }
+
     .splash-cover-hide {
       transform: translateY(-100%);
       opacity: 0;
-      transition: transform 0.7s cubic-bezier(.77,0,.18,1), opacity 0.38s 0.25s;
       pointer-events: none;
     }
-    /* ...rest of your CSS unchanged... */
+
     .navbar {
       width: 100%;
       height: 48px;
@@ -100,72 +82,204 @@
       position: relative;
       z-index: 10;
     }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+
+    .nav-logo img {
+      height: 30px;
     }
-    .nav-logo img { height: 30px; }
-    .nav-menu { display: flex; gap: 24px;}
+
+    .nav-menu {
+      display: flex;
+      gap: 24px;
+    }
+
     .nav-item {
-      color: var(--auav-grey); font-weight: 600; font-size: 1.07rem;
-      text-decoration: none; padding: 4px 12px; border-radius: 7px;
+      color: var(--auav-grey);
+      font-weight: 600;
+      font-size: 1.07rem;
+      text-decoration: none;
+      padding: 4px 12px;
+      border-radius: 7px;
       transition: background .17s;
     }
-    .nav-item.active, .nav-item:hover { background: var(--auav-orange); color: #fff;}
+
+    .nav-item.active,
+    .nav-item:hover {
+      background: var(--auav-orange);
+      color: #fff;
+    }
+
     .main-grid {
       display: grid;
       grid-template-columns: 20px 1fr 20px;
-      grid-template-rows: auto auto 1fr auto auto;
-      grid-template-areas:
-        "left main right"
-        "left stream right"
-        "left comms right"
-        "left footer right";
+      grid-template-rows: auto auto auto auto;
       height: calc(100vh - 48px);
-      min-height: calc(100vh - 48px);
-      max-height: calc(100vh - 48px);
       overflow: hidden;
     }
-    .side-bar-left, .side-bar-right { background-color: var(--auav-orange); }
-    .side-bar-left { grid-column: 1; grid-row: 1 / span 5; }
-    .side-bar-right { grid-column: 3; grid-row: 1 / span 5; }
-    @media (min-width: 701px) {
-      .side-bar-left, .side-bar-right {
-        position: fixed;
-        top: 48px;
-        bottom: 0;
-        width: 20px;
-        z-index: 1;
-        background-color: var(--auav-orange);
-      }
-      .side-bar-left { left: 0; }
-      .side-bar-right { right: 0; }
+
+    .side-bar-left,
+    .side-bar-right {
+      background-color: var(--auav-orange);
     }
-    @media (max-width: 700px) {
-      .side-bar-left, .side-bar-right { display: none; }
-      .main-grid { grid-template-columns: 0 1fr 0; }
+
+    .side-bar-left {
+      grid-column: 1;
+      grid-row: 1 / span 4;
     }
-    .main-content { grid-column: 2; grid-row: 1; text-align: center; padding: 16px 0 0;}
-    .logo { max-width: 200px; height: auto;}
-    h1 { font-size: 1.25rem; margin: 7px 0 10px;}
-    .video-wrapper { grid-column: 2; grid-row: 2; display: flex; justify-content: center; align-items: center; padding: 0 6px;}
-    .video-box { position: relative; width: 100%; max-width: 650px; aspect-ratio: 16 / 9; background: #000; border: 2px solid #000; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
-    iframe { position: absolute; width: 100%; height: 100%; border: none; border-radius: 6px;}
-    .comms-controls { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; align-items: center; padding: 7px;}
-    .comms-controls h3 { font-size: 1.08rem; margin-bottom: 8px;}
-    .switch-container { display: flex; gap: 22px; margin-top: 3px; align-items: center;}
-    .switch-group { display: flex; flex-direction: column; align-items: center; font-weight: bold; font-size: 0.97rem;}
-    .toggle-ios { position: relative; display: inline-block; width: 56px; height: 28px;}
-    .toggle-ios input { opacity: 0; width: 0; height: 0;}
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;}
-    .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;}
-    input:checked + .slider { background-color: var(--auav-orange);}
-    input:checked + .slider:before { transform: translateX(24px);}
-    .slider::after { content: "OFF"; color: white; font-size: 10px; font-weight: bold; position: absolute; top: 5px; right: 8px; transition: .4s;}
-    input:checked + .slider::after { content: "ON"; left: 8px; right: auto;}
-    .footer-logos { grid-column: 2; grid-row: 4; display: flex; justify-content: center; align-items: flex-end; min-height: 55px;}
-    .footer-logos img { max-width: 250px; height: auto; margin-top: 0; margin-bottom: 3px;}
+
+    .side-bar-right {
+      grid-column: 3;
+      grid-row: 1 / span 4;
+    }
+
+    .main-content {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: center;
+      padding: 16px 0 0;
+    }
+
+    .logo {
+      max-width: 200px;
+      height: auto;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      margin: 7px 0 10px;
+    }
+
+    .video-wrapper {
+      grid-column: 2;
+      grid-row: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 6px;
+    }
+
+    .video-box {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border: 2px solid #000;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+    }
+
+    .video-box iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .comms-controls {
+      grid-column: 2;
+      grid-row: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 7px;
+    }
+
+    .comms-controls h3 {
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+
+    .switch-container {
+      display: flex;
+      gap: 22px;
+      margin-top: 3px;
+      align-items: center;
+    }
+
+    .switch-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: bold;
+      font-size: 0.97rem;
+    }
+
+    .toggle-ios {
+      position: relative;
+      display: inline-block;
+      width: 56px;
+      height: 28px;
+    }
+
+    .toggle-ios input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--auav-orange);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .slider::after {
+      content: "OFF";
+      color: white;
+      font-size: 10px;
+      font-weight: bold;
+      position: absolute;
+      top: 5px;
+      right: 8px;
+    }
+
+    input:checked + .slider::after {
+      content: "ON";
+      left: 8px;
+      right: auto;
+    }
+
+    .footer-logos {
+      grid-column: 2;
+      grid-row: 4;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      min-height: 55px;
+      padding-bottom: 32px;
+    }
+
+    .footer-logos img {
+      max-width: 250px;
+      height: auto;
+      margin-bottom: 3px;
+    }
+
     .sticky-footer {
       position: fixed;
       left: 0;
@@ -176,18 +290,15 @@
       font-size: 0.97rem;
       text-align: center;
       z-index: 10000;
-      padding: 7px 0 5px 0;
-      letter-spacing: 0.01em;
-      box-shadow: 0 -1px 6px 0 rgba(0,0,0,0.07);
+      padding: 7px 0 5px;
       font-weight: 600;
       width: 100vw;
     }
+
     #password-overlay {
       position: fixed;
       z-index: 99999;
       inset: 0;
-      width: 100vw;
-      height: 100vh;
       background: rgba(250, 250, 250, 0.93);
       backdrop-filter: blur(10px) brightness(0.97);
       -webkit-backdrop-filter: blur(10px) brightness(0.97);
@@ -195,37 +306,32 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      pointer-events: all;
     }
-    body.locked > *:not(#password-overlay):not(#splash-cover) {
-      filter: blur(8px) brightness(0.85);
-      pointer-events: none !important;
-      user-select: none !important;
-      -webkit-user-select: none !important;
-    }
+
     #pw-box {
       background: #fff;
       border-radius: 18px;
-      box-shadow: 0 6px 32px 0 rgba(0,0,0,0.15);
-      padding: 32px 22px 20px 22px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.15);
+      padding: 32px 22px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
       min-width: 220px;
       border-top: 8px solid var(--auav-orange);
-      z-index: 999999;
     }
+
     #pw-box img {
       width: 90px;
       margin-bottom: 13px;
     }
+
     #pw-box h2 {
-      margin: 0 0 14px 0;
+      margin: 0 0 14px;
       font-weight: 600;
       font-size: 1.09rem;
       color: var(--auav-grey);
-      letter-spacing: 0.02em;
     }
+
     #pw-input {
       padding: 7px 12px;
       border: 1.5px solid var(--auav-orange);
@@ -233,12 +339,14 @@
       font-size: 0.94rem;
       width: 100%;
       margin-bottom: 8px;
-      transition: border-color 0.3s;
+      box-sizing: border-box;
     }
+
     #pw-input:focus {
       outline: none;
       border-color: #fd9827;
     }
+
     #pw-btn {
       background: var(--auav-orange);
       color: #fff;
@@ -247,62 +355,98 @@
       padding: 7px 22px;
       font-size: 0.98rem;
       font-weight: 600;
-      letter-spacing: 0.04em;
       cursor: pointer;
-      margin-bottom: 2px;
       margin-top: 6px;
-      transition: background 0.2s;
     }
-    #pw-btn:active {
-      background: #ff9932;
-    }
+
     #pw-error {
       color: #c4432c;
       font-size: 0.95rem;
       min-height: 18px;
       margin-top: 2px;
     }
-    /* --- MOBILE OVERRIDES --- */
+
     @media (max-width: 700px) {
-      html, body {
-        height: 100vh !important;
-        min-height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
-      }
       .navbar {
         padding: 0 10px;
       }
-      .nav-logo { flex: 1 1 auto; }
-      .nav-menu { display: flex; gap: 0; margin-left: auto; }
-      .nav-item { font-size: 4vw; padding: 2vw 4vw; margin: 0;}
-      .nav-item:first-child { border-radius: 7px 0 0 7px; }
-      .nav-item:last-child { border-radius: 0 7px 7px 0; }
-      .main-grid { display: block; height: auto !important; min-height: 0 !important; max-height: none !important; width: 100vw; }
-      .main-content { padding: 8vw 0 0 0 !important; margin: 0 !important; text-align: center;}
-      .logo { max-width: 30vw; margin-top: 0.7vw; margin-bottom: 1vw; }
-      h1 { font-size: 5vw; margin: 0.7vw 0 0 0 !important;}
-      .video-wrapper { display: flex; justify-content: center; align-items: center; padding: 0 2vw; margin: 0 auto; width: 100vw; box-sizing: border-box;}
-      .video-box { position: relative; width: 95vw; max-width: 95vw; aspect-ratio: 16 / 9; min-height: 0; border-radius: 0; border: none; box-shadow: none; margin: 0 auto;}
-      iframe { position: static; width: 95vw !important; max-width: 95vw !important; height: 47vw !important; border-radius: 0 !important; background: #222; margin: 0 auto; display: block;}
-      .comms-controls { margin-top: 2vw !important; margin-bottom: 2vw !important; padding: 0 !important; }
-      .comms-controls h3 { font-size: 4vw; margin-bottom: 1vw; margin-top: 0;}
-      .switch-group { font-size: 3vw;}
-      .switch-container { gap: 5vw; margin-top: 1vw; }
-      .toggle-ios { width: 13vw; height: 5vw;}
-      .toggle-ios .slider:before { height: 4vw; width: 4vw; left: 1vw; bottom: 1vw;}
-      .footer-logos { min-height: 8vw !important; margin-bottom: 0vw; margin-top: 2vw; }
-      .footer-logos img { max-width: 36vw !important; margin-top: 0; margin-bottom: 0vw;}
-      .sticky-footer { font-size: 2.9vw; padding: 2vw 0 1.4vw 0;}
+
+      .nav-menu {
+        gap: 0;
+        margin-left: auto;
+      }
+
+      .nav-item {
+        font-size: 4vw;
+        padding: 2vw 4vw;
+      }
+
+      .side-bar-left,
+      .side-bar-right {
+        display: none;
+      }
+
+      .main-grid {
+        display: block;
+        height: auto;
+        width: 100vw;
+      }
+
+      .main-content {
+        padding: 8vw 0 0;
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 30vw;
+      }
+
+      h1 {
+        font-size: 5vw;
+      }
+
+      .video-wrapper {
+        padding: 0 2vw;
+      }
+
+      .video-box {
+        width: 95vw;
+        max-width: 95vw;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+
+      .comms-controls h3 {
+        font-size: 4vw;
+      }
+
+      .switch-container {
+        gap: 5vw;
+      }
+
+      .switch-group {
+        font-size: 3vw;
+      }
+
+      .footer-logos img {
+        max-width: 36vw;
+      }
+
+      .sticky-footer {
+        font-size: 2.9vw;
+        padding: 2vw 0 1.4vw;
+      }
     }
   </style>
 </head>
+
 <body class="locked">
-  <!-- Splash Animation Overlay -->
-  <div id="splash-cover" style="display:none;">
+
+  <div id="splash-cover">
     <img src="AUAV_INLINE.png" alt="AUAV Logo" id="splash-logo" />
   </div>
-  <!-- Password Overlay -->
+
   <div id="password-overlay">
     <div id="pw-box">
       <img src="AUAV_INLINE.png" alt="AUAV Logo" />
@@ -312,141 +456,148 @@
       <div id="pw-error"></div>
     </div>
   </div>
-  <!-- NAVBAR - always present, blurred when locked -->
+
   <nav class="navbar">
     <div class="nav-logo">
-      <img src="AUAV_INLINE.png" alt="AUAV Logo">
+      <img src="AUAV_INLINE.png" alt="AUAV Logo" />
     </div>
     <div class="nav-menu">
       <a href="index.html" class="nav-item active">Home</a>
       <a href="archive.html" class="nav-item">Archived Streams</a>
     </div>
   </nav>
+
   <div class="main-grid">
     <div class="side-bar-left"></div>
     <div class="side-bar-right"></div>
+
     <div class="main-content">
-      <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo">
+      <img src="AUAV_INLINE.png" class="logo" alt="AUAV Logo" />
       <h1>Private Livestream</h1>
     </div>
+
     <div class="video-wrapper">
       <div class="video-box">
-        <iframe 
-  src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar.netlify.app"
-  allowfullscreen
-  loading="lazy">
-</iframe>
+        <iframe
+          src="https://player.twitch.tv/?channel=auav_us_livestream&parent=deepstar.netlify.app&autoplay=true&muted=true"
+          frameborder="0"
+          allowfullscreen="true"
+          scrolling="no">
+        </iframe>
       </div>
     </div>
+
     <div class="comms-controls">
       <h3>Communication Controls</h3>
       <div class="switch-container">
         <div class="switch-group">
           <label class="toggle-ios">
-            <input type="checkbox" checked onchange="toggleComms()">
+            <input type="checkbox" checked onchange="toggleAudio(this.checked)" />
             <span class="slider"></span>
           </label>
           <span>Audio</span>
         </div>
+
         <div class="switch-group">
           <label class="toggle-ios">
-            <input type="checkbox" onchange="handleMicToggle(this.checked)">
+            <input type="checkbox" onchange="handleMicToggle(this.checked)" />
             <span class="slider"></span>
           </label>
           <span>Mic</span>
         </div>
       </div>
     </div>
+
     <div class="footer-logos">
-      <img src="Untitled design (2).png" alt="Group Logos">
+      <img src="Untitled design (2).png" alt="Group Logos" />
     </div>
   </div>
+
   <div class="sticky-footer">
     © 2025 AUAV — Test Stream Environment
   </div>
-  <div id="comms"></div>
+
   <script>
-    // SPLASH LOGIC: Only show splash if sessionStorage doesn't have "auav_pw_ok"
+    const PASSWORD = "Shell123";
+    const overlay = document.getElementById("password-overlay");
+    const input = document.getElementById("pw-input");
+    const btn = document.getElementById("pw-btn");
+    const error = document.getElementById("pw-error");
+
     function playSplashIfNeeded() {
-      if (sessionStorage.getItem('auav_pw_ok') !== 'yes') {
-        const splash = document.getElementById('splash-cover');
-        splash.style.display = 'flex';
+      if (sessionStorage.getItem("auav_pw_ok") !== "yes") {
+        const splash = document.getElementById("splash-cover");
+        splash.style.display = "flex";
+
         setTimeout(() => {
-          splash.classList.add('splash-cover-hide');
+          splash.classList.add("splash-cover-hide");
           setTimeout(() => {
             splash.style.display = "none";
           }, 850);
         }, 1700);
       }
     }
-    playSplashIfNeeded();
 
-    // Password overlay logic (remembers session)
-    const PASSWORD = "Shell123";
-    const overlay = document.getElementById('password-overlay');
-    const input = document.getElementById('pw-input');
-    const btn = document.getElementById('pw-btn');
-    const error = document.getElementById('pw-error');
     function unlockPage() {
       overlay.style.opacity = 0;
+
       setTimeout(() => {
-        overlay.style.display = 'none';
-        document.body.classList.remove('locked');
-        document.body.style.overflow = '';
+        overlay.style.display = "none";
+        document.body.classList.remove("locked");
       }, 380);
-      sessionStorage.setItem('auav_pw_ok', 'yes');
-      error.textContent = '';
+
+      sessionStorage.setItem("auav_pw_ok", "yes");
+      error.textContent = "";
     }
-    // If already validated this session, hide overlay
-    if (sessionStorage.getItem('auav_pw_ok') === 'yes') {
-      unlockPage();
-    }
+
     function tryPassword() {
       if (input.value === PASSWORD) {
         unlockPage();
       } else {
-        error.textContent = 'Incorrect password.';
-        input.value = '';
+        error.textContent = "Incorrect password.";
+        input.value = "";
         input.focus();
       }
     }
+
     btn.onclick = tryPassword;
+
     input.onkeydown = function(e) {
       if (e.key === "Enter") tryPassword();
     };
-    setTimeout(() => { input.focus(); }, 200);
 
-    // OvenPlayer and comms logic
-    const commsPlayer = OvenPlayer.create("comms", {
-      sources: [{
-        type: "webrtc",
-        file: "wss://your-server/live/comms"
-      }],
-      autoStart: true,
-      mute: false,
-      controls: false,
-      width: "0",
-      height: "0"
-    });
-    function toggleComms() {
-      commsPlayer.setMute(!commsPlayer.getMute());
+    if (sessionStorage.getItem("auav_pw_ok") === "yes") {
+      unlockPage();
+    } else {
+      playSplashIfNeeded();
+      setTimeout(() => input.focus(), 200);
     }
+
+    function toggleAudio(enabled) {
+      console.log("Audio toggle:", enabled);
+    }
+
     let micStream;
+
     function handleMicToggle(enabled) {
       if (enabled) {
-        navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-          micStream = stream;
-          // Connect micStream to server here
-        }).catch(err => {
-          alert("Mic access denied or unavailable.");
-        });
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(stream => {
+            micStream = stream;
+            console.log("Mic enabled");
+          })
+          .catch(() => {
+            alert("Mic access denied or unavailable.");
+          });
       } else {
         if (micStream) {
           micStream.getTracks().forEach(track => track.stop());
           micStream = null;
+          console.log("Mic disabled");
         }
       }
     }
   </script>
+
 </body>
 </html>
